@@ -1,9 +1,9 @@
 # Reproducibility Guide
 
-This repository tracks solver and experiment code. Generated result files,
-figures, tables, manuscript builds, and submission packages are intentionally
-kept in local artifact directories so a clone starts from code and regenerates
-outputs locally. Submission-package details live in `SUBMISSION.md`;
+This repository tracks the solver, experiment code, immutable arXiv-v1
+provenance, and the editable arXiv-v2 manuscript source under `paper/current`.
+Generated result files, manuscript builds, and submission packages are written
+outside the source tree. Submission-package details live in `SUBMISSION.md`;
 scientific guardrails and latest validation status live in
 `REVISION_HISTORY.md`.
 

@@ -24,6 +24,12 @@ global solve, segment-local construction, and swept-state reconstruction. This
 is a post-V3 protocol correction and must be disclosed in the arXiv-v2 change
 description; no old evidence is modified in place.
 
+After the correction, the repository test suite reports 86 passes and the
+bounded clean reproducibility check passes its synthetic benchmark, parametric
+sweep, segment-local, and semi-synthetic pricing smoke stages. These smoke
+outputs establish infrastructure health only; they are not the canonical v2
+numerical evidence release.
+
 ## Current Paper Positioning
 
 The manuscript is framed as a certifying decomposition framework for

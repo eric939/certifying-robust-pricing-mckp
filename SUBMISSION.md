@@ -1,12 +1,15 @@
 # Submission Package
 
-This file is the public submission/package manifest. It distinguishes the
-public GitHub code repository from the local journal/arXiv manuscript artifact
-bundle.
+This file is the submission/package manifest for Paper A. The editable
+arXiv-v2 source is tracked under `paper/current`; generated public/blind PDFs,
+tables, and submission bundles must be written to separate build or release
+directories.
 
 ## Public and Blind Builds
 
-Public manuscript, from the local artifact workspace:
+The historical commands below describe the recovered V3 artifact workspace and
+are retained for provenance. They are not the build commands for the new
+`paper/current` arXiv-v2 source:
 
 ```bash
 cd paper_versions/v2

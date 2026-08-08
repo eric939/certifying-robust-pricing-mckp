@@ -28,4 +28,4 @@ pathc-smoke:
 	$(PYTHON) scripts/run_pathC_semisynthetic_application.py --calibration-dir results/pathC/calibration --output-dir results/pathC/semisynthetic_application_smoke --seeds 1 --n 60 --m 8 --stress-scenarios 200 --gamma-grid 0,sqrt,n --run-exact-small-subset
 
 clean:
-	rm -rf results paper .pytest_cache
+	rm -rf output .pytest_cache
