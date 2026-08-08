@@ -1,17 +1,25 @@
-# robust_mckp
+# robust_pricing_mckp
 
-Reference solver and reproducibility code for the manuscript
+Paper A repository for the manuscript
 **“Certifying Γ-Robust Discrete Pricing via Full-Breakpoint
 Multiple-Choice Knapsack Decomposition.”**  The package implements
 finite-menu integer-budget Γ-robust MCKP routines, including HullRound,
 exact θ-enumerated branch-and-bound, and an exact parametric θ-sweep with
 incremental fixed-θ data and safe hull maintenance.
 
-This GitHub repository intentionally contains code needed to install the
-solver, run tests, and regenerate computational experiments. Manuscript source,
-generated figures, generated tables, benchmark CSVs, and local review packages
-belong to the journal/arXiv artifact bundle rather than the public code
-repository.
+This is the independent continuation of
+[arXiv:2603.18653](https://arxiv.org/abs/2603.18653). The active manuscript is
+being prepared as version 2 of that arXiv record. It retains the original
+paper's identity—robust finite-menu pricing, full-breakpoint decomposition,
+fixed-threshold MCKP structure, rounding, and exact certification—and does not
+include the simultaneous all-threshold envelope contribution of the separate
+Paper B repository.
+
+The related Paper B project,
+[robust_mckp](https://github.com/eric939/robust_mckp), studies simultaneous
+group-envelope bounds over the threshold family. It builds on and cites Paper A
+but has a different central theorem, algorithm, evidence release, and arXiv
+identifier. See `PAPER_LINEAGE.md` for the formal contribution boundary.
 
 ## Contents
 
@@ -19,6 +27,10 @@ repository.
 - `REPRODUCIBILITY.md`: environment, tests, smoke checks, and experiment entry points.
 - `SUBMISSION.md`: public/blind manuscript and artifact-package checklist.
 - `REVISION_HISTORY.md`: durable scientific guardrails and latest validation status.
+- `PAPER_LINEAGE.md`: exact boundary and citation relationship with Paper B.
+- `paper/current/`: active editable source for arXiv:2603.18653v2.
+- `paper/archive/arxiv-2603.18653v1/`: immutable March 2026 PDF, source,
+  and code archive.
 - `manuscript/`: recovered complete 39-page public V3 paper and provenance.
 - `src/robust_mckp/`: solver package, including HullRound and exact
   θ-enumerated branch-and-bound.
@@ -65,10 +77,10 @@ python3 -m pip install -U pip
 python3 -m pip install -e ".[experiments,validation,dev]"
 ```
 
-Minimal package-only install from GitHub:
+Minimal package-only install from GitHub after the repository is made public:
 
 ```bash
-python3 -m pip install "git+https://github.com/eric939/robust_mckp.git"
+python3 -m pip install "git+https://github.com/eric939/robust_pricing_mckp.git"
 ```
 
 ## Quick Check
@@ -126,11 +138,11 @@ Please cite the software and accompanying manuscript. A machine-readable
 citation file is included in `CITATION.cff`.
 
 ```bibtex
-@misc{shao2026robustmckp,
-  title = {robust_mckp: Certifying Gamma-Robust Discrete Pricing via Full-Breakpoint MCKP Decomposition},
+@misc{shao2026robustpricingmckp,
+  title = {robust_pricing_mckp: Certifying Gamma-Robust Discrete Pricing via Full-Breakpoint MCKP Decomposition},
   author = {Shao, Eric},
   year = {2026},
-  howpublished = {\url{https://github.com/eric939/robust_mckp}}
+  howpublished = {\url{https://github.com/eric939/robust_pricing_mckp}}
 }
 ```
 

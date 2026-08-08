@@ -34,13 +34,13 @@ acknowledgments, or self-citation bibliography item.
 Public repository:
 
 ```text
-https://github.com/eric939/robust_mckp
+https://github.com/eric939/robust_pricing_mckp
 ```
 
 Verify the current public HEAD with:
 
 ```bash
-git ls-remote https://github.com/eric939/robust_mckp.git HEAD
+git ls-remote https://github.com/eric939/robust_pricing_mckp.git HEAD
 ```
 
 The public repository contains the solver package, tests, experiment drivers,

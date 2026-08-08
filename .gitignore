@@ -3,7 +3,6 @@
 *.DS_Store
 .venv/
 .pytest_cache/
-paper/
 paper_current/
 paper_notes/
 paper_versions/
@@ -63,3 +62,8 @@ scripts/* 2.py
 !manuscript/
 !manuscript/README.md
 !manuscript/robust_mckp_v3_full.pdf
+
+# Paper A now keeps its editable arXiv-v2 source and immutable arXiv-v1
+# provenance in-repository. Builds must be written outside these source trees.
+!paper/
+!paper/**
