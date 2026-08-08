@@ -75,6 +75,31 @@ def test_sweep_visits_full_original_breakpoint_set() -> None:
     assert sweep.diagnostics["theta_count_states_evaluated"] == len(expected)
 
 
+def test_sweep_preserves_and_reconstructs_nearby_distinct_breakpoints() -> None:
+    delta = 9e-11
+    instance = PricingInstance(
+        items=[
+            [Option(1.0, 0.5, 1.0)],
+            [Option(1.0, 0.5 + delta, 1.0 + delta)],
+        ],
+        gamma=1,
+    )
+    sweep = build_parametric_theta_sweep(
+        instance,
+        tol=1e-9,
+        config=ParametricThetaSweepConfig(
+            tol=1e-9,
+            validate_against_recompute=True,
+            reuse_hulls=True,
+        ),
+    )
+    assert [state.theta for state in sweep.states] == [0.0, 1.0, 1.0 + delta]
+    for state in sweep.states:
+        direct = build_fixed_theta_data(instance, state.theta)
+        for actual, expected in zip(state.data.s_theta, direct.s_theta):
+            np.testing.assert_allclose(actual, expected, atol=1e-15, rtol=0.0)
+
+
 def test_hull_reuse_safety_with_validation_enabled() -> None:
     instance = PricingInstance(
         items=[

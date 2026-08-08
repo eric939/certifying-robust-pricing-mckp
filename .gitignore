@@ -67,3 +67,9 @@ scripts/* 2.py
 # provenance in-repository. Builds must be written outside these source trees.
 !paper/
 !paper/**
+paper/**/.DS_Store
+paper/**/*.aux
+paper/**/*.log
+paper/**/*.out
+paper/**/*.toc
+paper/**/*.synctex.gz

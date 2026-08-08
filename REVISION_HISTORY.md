@@ -4,6 +4,26 @@ This file replaces earlier transient worklogs, mock-review reports, claim
 checklists, and final-gate notes. It is intentionally short and should record
 only durable facts needed by future maintainers.
 
+## August 2026 arXiv-v2 correction
+
+Date: 2026-08-09.
+
+During the Paper A/Paper B repository split, the preserved V3 implementation
+was found to merge threshold candidates whose difference was at most the solver
+tolerance. This conflicted with the full-original-breakpoint theorem. A
+100-group, $\Gamma=1$ instance with deviations `1` and `1 + 9e-11` makes the
+upper value the only feasible threshold; clustering at `1e-9` removes it and
+can produce a false infeasibility report.
+
+The Paper A v2 implementation now preserves every binary64-distinct original
+deviation plus zero in both global and segment-local candidate sets. The
+parametric sweep activates breakpoints by exact candidate order and reuses an
+item hull only when its stored cost--value arrays are exactly unchanged.
+Regression tests cover candidate construction, the unique-feasible-breakpoint
+global solve, segment-local construction, and swept-state reconstruction. This
+is a post-V3 protocol correction and must be disclosed in the arXiv-v2 change
+description; no old evidence is modified in place.
+
 ## Current Paper Positioning
 
 The manuscript is framed as a certifying decomposition framework for

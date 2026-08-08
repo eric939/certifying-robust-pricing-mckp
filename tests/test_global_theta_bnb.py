@@ -68,6 +68,50 @@ def test_full_theta_candidates_all_zero_single_option() -> None:
     assert build_full_theta_candidates(instance) == [0.0]
 
 
+def test_full_theta_candidates_preserve_binary64_distinct_nearby_values() -> None:
+    delta = 9e-11
+    instance = PricingInstance(
+        items=[
+            [Option(1.0, 1.0, 1.0)],
+            [Option(1.0, 1.0, 1.0 + delta)],
+        ],
+        gamma=1,
+    )
+    assert build_full_theta_candidates(instance, tol=1e-9) == [
+        0.0,
+        1.0,
+        1.0 + delta,
+    ]
+
+
+def test_global_bnb_preserves_close_unique_feasible_breakpoint() -> None:
+    delta = 9e-11
+    total_margin = 1.0 + delta
+    instance = PricingInstance(
+        items=[
+            [
+                Option(
+                    value=1.0,
+                    margin=total_margin / 100.0,
+                    uncertainty=1.0 if index == 0 else 1.0 + delta,
+                )
+            ]
+            for index in range(100)
+        ],
+        gamma=1,
+    )
+    result = solve_global_theta_bnb(
+        instance,
+        GlobalThetaBNBConfig(
+            tolerance=1e-12,
+            use_hullround_incumbent=False,
+        ),
+    )
+    assert result.status == "optimal"
+    assert result.objective_value == pytest.approx(100.0)
+    assert result.selected_theta == pytest.approx(1.0 + delta, abs=0.0, rel=0.0)
+
+
 def test_reduced_theta_set_can_falsely_reject_feasible_selection() -> None:
     # With two selected deviations of size 1 and Gamma=1, theta=0 gives
     # (0.75 - 1) + (0.75 - 1) < 0, but theta=1 gives 0.75 + 0.75 - 1 > 0.

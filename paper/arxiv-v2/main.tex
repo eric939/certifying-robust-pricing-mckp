@@ -825,12 +825,137 @@ Under (A)--(B), the absolute LP--IP gap is controlled by a single-item jump whil
 relative gap vanishes as $n\to\infty$. Hence the LP relaxation provides an essentially tight benchmark for large portfolios.
 
 % ============================================================
+% EXACT FULL-BREAKPOINT CERTIFICATION
+% ============================================================
+\section{Exact Full-Breakpoint Certification}\label{sec:exact}
+
+HullRound supplies a robust-feasible decision and an additive fixed-$\theta$
+certificate, but it need not solve the integer MCKP exactly.  When an exact
+robust optimum or an anytime global gap is required, the same decomposition and
+hull-greedy LP geometry can instead be used inside branch-and-bound.  The
+distinction between LP geometry and integer search is essential throughout this
+section.
+
+\subsection{Fixed-\texorpdfstring{$\theta$}{theta} exact search}
+
+Fix $\theta\in\mathcal B$ with $C^\theta\ge0$.  A branch-and-bound node fixes
+options for a subset $F$ of the items and leaves $U:=\{1,\ldots,n\}\setminus F$
+free.  If the fixed items use cost $C_F$ and contribute value $V_F$, the
+remaining capacity is $C^\theta-C_F$.  The hull-greedy optimum of the residual
+LP relaxation over $U$, plus $V_F$, is an upper bound on every integer
+completion of the node.  Thus the fixed-$\theta$ LP routine from
+\Cref{subsec:hull_theta} is also a structure-exploiting node-bound oracle.
+
+Upper-hull filtering may be used to compute this LP bound, but it is not a
+general integer-preprocessing rule.  An original option may be removed from
+the exact search only if another option of the same item has weakly smaller
+fixed-$\theta$ cost and weakly larger value, with at least one strict
+inequality.  Non-dominated options below the upper hull remain searchable.
+
+\begin{theorem}[Fixed-$\theta$ branch-and-bound exactness]\label{thm:fixed_theta_bnb}
+Fix $\theta\in\mathcal B$.  Suppose branching covers every original option
+remaining after the integer-safe within-item dominance rule, and suppose a node
+is pruned only when it is infeasible or when its valid residual LP upper bound
+is no larger than the incumbent value.  If every live node is eventually
+fathomed, the returned incumbent is optimal for the fixed-$\theta$ MCKP.
+\end{theorem}
+
+\begin{proof}
+The within-item dominance rule preserves at least one optimal completion,
+because a removed option can be replaced without increasing cost or decreasing
+value.  Branching partitions all remaining integer completions.  Infeasible
+nodes contain no completion, while the residual LP bound dominates every
+integer completion of a feasible node.  Consequently, a bound-pruned node
+cannot improve the incumbent.  Once all nodes are fathomed, no unevaluated
+integer completion can improve it.
+\end{proof}
+
+Every incumbent produced by the floating-point implementation is checked by
+the original sorted-$\Gamma$ certificate in \eqref{eq:certify_alg}; solver
+tolerances are not substituted for robust feasibility.
+
+\subsection{Global exactness and anytime gap}\label{subsec:global_exact}
+
+Let $Z^{\mathrm{IP}}(\theta)$ denote the fixed-$\theta$ integer optimum.  By
+\Cref{prop:theta_candidates_discrete_clean}, the robust optimum is
+\[
+Z^{\mathrm{rob}}=\max_{\theta\in\mathcal B}Z^{\mathrm{IP}}(\theta).
+\]
+The global algorithm initializes a valid record $U_\theta\ge
+Z^{\mathrm{IP}}(\theta)$ for every original threshold before reporting a
+finite gap.  A candidate with $C^\theta<0$ or an infeasible fixed-$\theta$ LP
+receives $U_\theta=-\infty$; otherwise its root LP value is a valid initial
+record.  As search proceeds, a record may be replaced by a proven optimum or
+by the best remaining branch-and-bound upper bound.  A threshold is pruned only
+when its valid record cannot improve the robust-feasible global incumbent
+$Z^{\mathrm{inc}}$.
+
+\begin{theorem}[Global full-breakpoint certificate]\label{thm:global_exact}
+Construct $\mathcal B=\{0\}\cup\{|t_{ij}|\}$ from all original admissible
+options.  If every unpruned fixed-$\theta$ search is completed under the
+conditions of \Cref{thm:fixed_theta_bnb}, the best certified incumbent is a
+globally optimal $\Gamma$-robust solution.  Under time or node limits, if every
+$\theta\in\mathcal B$ has a valid upper-bound record, then
+\[
+ Z^{\mathrm{inc}}\ \le\ Z^{\mathrm{rob}}\ \le\
+ U^{\mathrm{global}}:=\max_{\theta\in\mathcal B}U_\theta.
+\]
+Hence $U^{\mathrm{global}}-Z^{\mathrm{inc}}$ is a valid absolute anytime gap.
+If even one original threshold lacks a valid record, no finite global gap is
+certified.
+\end{theorem}
+
+\begin{proof}
+The finite-breakpoint reduction covers every robust-feasible discrete
+selection.  Completed fixed-$\theta$ searches are exact by
+\Cref{thm:fixed_theta_bnb}, and a threshold pruned by a valid LP record cannot
+improve the incumbent.  Under limits, the incumbent is a lower bound because
+it passes the original robust certificate.  Each $U_\theta$ bounds its
+fixed-threshold integer optimum, so their maximum bounds the maximum over the
+complete threshold family.  The last conclusion follows because an unrecorded
+threshold may contain an unbounded, relative to the recorded family, improving
+solution.
+\end{proof}
+
+\subsection{Guarded parametric sweep}\label{subsec:sweep}
+
+Independent enumeration reconstructs all transformed data at every
+$\theta\in\mathcal B$.  A sweep over the same sorted full-breakpoint set may
+instead update $s^\theta_{ij}$ using its piecewise-affine identity.  After each
+update, item baselines, costs, and $C^\theta$ are recomputed.  An item hull is
+reused only when its complete transformed cost--value point multiset is
+unchanged; otherwise it is rebuilt from the original admissible options.
+
+\begin{proposition}[Validity of the guarded full-breakpoint sweep]\label{prop:sweep_exact}
+In exact arithmetic, a sweep that visits the complete set $\mathcal B$,
+constructs the same transformed fixed-$\theta$ data as independent
+recomputation, and applies the guarded hull-reuse rule produces fixed-threshold
+LP bounds and exact-search certificates with the same validity status as
+independent enumeration.
+\end{proposition}
+
+\begin{proof}
+Both procedures visit the same finite candidates.  The piecewise-affine update
+is algebraically identical to \eqref{eq:s_theta_def_clean}.  Reusing an
+unchanged point set preserves its hull; rebuilding a changed point set recovers
+the independent hull.  Exact branch-and-bound continues to branch over the
+integer-safe original options and uses the hull only as an LP-bound object, so
+the arguments of \Cref{thm:fixed_theta_bnb,thm:global_exact} are unchanged.
+\end{proof}
+
+This proposition is a correctness statement, not a worst-case runtime
+dominance claim.  The implementation preserves every binary64-distinct
+original deviation plus zero, validates sampled swept states against
+independent reconstruction, and fails closed rather than tolerance-clustering
+threshold candidates.
+
+% ============================================================
 % SECTION: NUMERICAL RESULTS
 % ============================================================
 \section{Numerical Results}\label{sec:numerics}
 
-We empirically examine three consequences of the structural analysis developed in
-\Cref{sec:structure,sec:algorithm}:
+We empirically examine consequences of the structural and certification analysis developed in
+\Cref{sec:structure,sec:algorithm,sec:exact}:
 (i) the rounding loss is bounded by a single hull jump and the relative gap decays as \(O(1/n)\)
     (\Cref{prop:igap_additive_theta_clean,cor:igap_relative_theta_clean});
 (ii) the algorithm scales tractably, upper-hull filtering compresses per-item menus significantly,
@@ -1600,6 +1725,13 @@ $100$) and a stylized retail application ($n=300$ SKUs, four segments, heterogen
 uncertainty) are consistent with these theoretical properties on the tested instances.
 Across these experiments, the observed integrality gap is negligible, $\Gamma$-budget
 protection reduces or eliminates observed margin violations at a revenue cost below $1\%$ in the synthetic frontier experiment and in the stylized retail case study, and the algorithm solves the reported instances in seconds to minutes.
+
+The exact layer in \Cref{sec:exact} separates the role of the hull as an LP
+bound from the original integer option set, preserves a valid record for every
+full-breakpoint subproblem, and therefore supports either an exact optimum or a
+valid anytime global gap.  The guarded sweep changes how fixed-threshold data
+are constructed without changing the threshold family or certificate
+semantics.
 
 Several directions remain open.  A guarded parametric sweep can update transformed coefficients over the complete threshold set and reuse a hull only when its defining point set is unchanged.  A different subsequent question is whether the largest LP value over the entire threshold family can be bounded simultaneously, rather than by solving every fixed-threshold relaxation; that development is not claimed here.
 Extending the uncertainty model to capture cross-item demand correlations (e.g.\ through
