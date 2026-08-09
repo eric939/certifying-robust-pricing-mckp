@@ -358,7 +358,7 @@ def _build_fixed_theta_cache(
         hull_base_value.append(float(hull.values[0]) if hull.values.size else float("-inf"))
         max_value.append(float(max(float(fixed_data.values[i][j]) for j in opts)) if opts else float("-inf"))
         for k, (slope, length) in enumerate(zip(hull.slopes, hull.delta_costs)):
-            if float(length) > tol:
+            if float(length) > 0.0:
                 global_segments.append(CachedHullSegment(item=i, index=k, slope=float(slope), length=float(length)))
     global_segments.sort(key=lambda seg: (-seg.slope, int(seg.item), int(seg.index)))
     return FixedThetaCache(
@@ -470,8 +470,9 @@ def compute_fixed_theta_lp_upper_bound(
 
 
 def _dominates(cost_a: float, value_a: float, cost_b: float, value_b: float, tol: float) -> bool:
-    no_worse = cost_a <= cost_b + tol and value_a >= value_b - tol
-    strict = cost_a < cost_b - tol or value_a > value_b + tol
+    del tol
+    no_worse = cost_a <= cost_b and value_a >= value_b
+    strict = cost_a < cost_b or value_a > value_b
     return bool(no_worse and strict)
 
 
@@ -485,10 +486,11 @@ def nondominated_option_indices(costs: np.ndarray, values: np.ndarray, tol: floa
     """
 
     keep: List[int] = []
+    del tol
     for j in range(len(values)):
         duplicate_smaller_index = False
         for k in range(j):
-            if abs(float(costs[k]) - float(costs[j])) <= tol and abs(float(values[k]) - float(values[j])) <= tol:
+            if float(costs[k]) == float(costs[j]) and float(values[k]) == float(values[j]):
                 duplicate_smaller_index = True
                 break
         if duplicate_smaller_index:
@@ -498,7 +500,7 @@ def nondominated_option_indices(costs: np.ndarray, values: np.ndarray, tol: floa
         for k in range(len(values)):
             if k == j:
                 continue
-            if _dominates(float(costs[k]), float(values[k]), float(costs[j]), float(values[j]), tol):
+            if _dominates(float(costs[k]), float(values[k]), float(costs[j]), float(values[j]), 0.0):
                 dominated = True
                 break
         if not dominated:

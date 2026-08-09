@@ -1,6 +1,7 @@
 PYTHON ?= python3
+RELEASE_DIR ?= results/release/2026-08-09-paper-a-final
 
-.PHONY: install-dev test check clean-check publishable-smoke solver-smoke pathc-smoke clean
+.PHONY: install-dev test check verify paper arxiv-package clean-check publishable-smoke solver-smoke pathc-smoke clean
 
 install-dev:
 	$(PYTHON) -m pip install -U pip
@@ -12,6 +13,17 @@ test:
 check:
 	$(PYTHON) -m pytest -q
 	$(PYTHON) scripts/run_clean_repro_check.py --quick
+
+paper:
+	cd paper/current && tectonic --keep-logs main.tex
+	cd paper/current && tectonic --keep-logs main_blind.tex
+
+verify:
+	$(PYTHON) -m pytest -q
+	$(PYTHON) scripts/verify_paper_a_release.py --release-dir $(RELEASE_DIR)
+
+arxiv-package: verify
+	$(PYTHON) scripts/build_arxiv_package.py --output submission_packages/arxiv-2603.18653v2-source.zip
 
 clean-check:
 	$(PYTHON) scripts/run_clean_repro_check.py --quick

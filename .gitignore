@@ -73,3 +73,14 @@ paper/**/*.log
 paper/**/*.out
 paper/**/*.toc
 paper/**/*.synctex.gz
+paper/arxiv-v2/main.pdf
+paper/arxiv-v2/main_blind.pdf
+
+# The definitive Paper A evidence release is intentionally versioned. Other
+# result directories remain local and immutable once created.
+!results/
+results/*
+!results/release/
+results/release/*
+!results/release/2026-08-09-paper-a-final/
+!results/release/2026-08-09-paper-a-final/**

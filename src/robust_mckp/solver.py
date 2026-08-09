@@ -62,10 +62,10 @@ def _universal_undominated_mask(s: np.ndarray, v: np.ndarray, abs_t: np.ndarray)
     m = s.size
     keep = np.ones(m, dtype=bool)
     for j in range(m):
-        ge_s = s >= s[j] - EPS
-        ge_v = v >= v[j] - EPS
-        le_t = abs_t <= abs_t[j] + EPS
-        strict = (s > s[j] + EPS) | (v > v[j] + EPS) | (abs_t < abs_t[j] - EPS)
+        ge_s = s >= s[j]
+        ge_v = v >= v[j]
+        le_t = abs_t <= abs_t[j]
+        strict = (s > s[j]) | (v > v[j]) | (abs_t < abs_t[j])
         dominated = ge_s & ge_v & le_t & strict
         dominated[j] = False
         if np.any(dominated):
@@ -290,7 +290,7 @@ def _advance_events_to_theta(
     n = len(states)
     touched_items: List[int] = []
 
-    while event_ptr < event_values.size and event_values[event_ptr] <= theta + EPS:
+    while event_ptr < event_values.size and event_values[event_ptr] <= theta:
         i = int(event_items[event_ptr])
         j = int(event_options[event_ptr])
         state = states[i]
@@ -382,9 +382,10 @@ def solve(instance: PricingInstance, *, upgrade_completion: bool = True) -> Solu
     The baseline-slack transform yields a knapsack with capacity
         C^theta = Sigma_i max_j s_i^theta(j) - Gamma theta.
 
-    This implementation applies two exact speedups:
-    1. Reduce theta candidates using strong universal dominance in (s, v, |t|).
-    2. Incrementally sweep theta to update per-item baseline maxima and capacity.
+    The implementation visits the full original binary64-distinct breakpoint
+    set.  Universal-dominance counts are retained as diagnostics only; they do
+    not alter the exact candidate family.  Per-item baseline maxima and
+    capacity are updated by an increasing-theta sweep.
 
     Args:
         instance: PricingInstance with per-option (v, s, t).
@@ -396,9 +397,14 @@ def solve(instance: PricingInstance, *, upgrade_completion: bool = True) -> Solu
 
     start = time.perf_counter()
     v_list, s_list, t_list = _extract_arrays(instance)
-    candidates, raw_candidate_count, reduced_candidate_count, abs_t_list = _build_reduced_candidates(
+    reduced_candidates, raw_candidate_count, reduced_candidate_count, abs_t_list = _build_reduced_candidates(
         v_list, s_list, t_list
     )
+    del reduced_candidates
+    candidates = np.unique(
+        np.concatenate([np.array([0.0], dtype=float), *abs_t_list])
+    )
+    candidates.sort()
 
     (
         states,
@@ -414,7 +420,7 @@ def solve(instance: PricingInstance, *, upgrade_completion: bool = True) -> Solu
     # Build event stream using ALL options, not only reduced-candidate options.
     event_values, event_items, event_options = _make_event_arrays(abs_t_list)
     event_ptr = 0
-    while event_ptr < event_values.size and event_values[event_ptr] <= 0.0 + EPS:
+    while event_ptr < event_values.size and event_values[event_ptr] <= 0.0:
         event_ptr += 1
 
     _compute_item_baselines(
@@ -520,6 +526,7 @@ def solve(instance: PricingInstance, *, upgrade_completion: bool = True) -> Solu
     instrumentation = {
         "candidate_count_raw": raw_candidate_count,
         "candidate_count_reduced": reduced_candidate_count,
+        "candidate_policy": "full_original_binary64_distinct_breakpoints",
         "candidate_reduction_ratio": (
             (reduced_candidate_count / raw_candidate_count) if raw_candidate_count > 0 else 1.0
         ),

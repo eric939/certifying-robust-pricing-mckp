@@ -229,7 +229,7 @@ def _build_cache_from_sweep_data(
         hull_base_value.append(float(hull.values[0]) if hull.values.size else float("-inf"))
         max_value.append(float(max(float(data.values[i][j]) for j in opts)) if opts else float("-inf"))
         for k, (slope, length) in enumerate(zip(hull.slopes, hull.delta_costs)):
-            if float(length) > tol:
+            if float(length) > 0.0:
                 global_segments.append(CachedHullSegment(item=i, index=k, slope=float(slope), length=float(length)))
         next_point_costs.append(costs)
         next_point_values.append(values)
