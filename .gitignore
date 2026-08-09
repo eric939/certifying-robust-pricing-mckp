@@ -3,7 +3,6 @@
 *.DS_Store
 .venv/
 .pytest_cache/
-paper/
 paper_current/
 paper_notes/
 paper_versions/
@@ -63,3 +62,25 @@ scripts/* 2.py
 !manuscript/
 !manuscript/README.md
 !manuscript/robust_mckp_v3_full.pdf
+
+# Paper A now keeps its editable arXiv-v2 source and immutable arXiv-v1
+# provenance in-repository. Builds must be written outside these source trees.
+!paper/
+!paper/**
+paper/**/.DS_Store
+paper/**/*.aux
+paper/**/*.log
+paper/**/*.out
+paper/**/*.toc
+paper/**/*.synctex.gz
+paper/arxiv-v2/main.pdf
+paper/arxiv-v2/main_blind.pdf
+
+# The definitive Paper A evidence release is intentionally versioned. Other
+# result directories remain local and immutable once created.
+!results/
+results/*
+!results/release/
+results/release/*
+!results/release/2026-08-09-paper-a-final/
+!results/release/2026-08-09-paper-a-final/**

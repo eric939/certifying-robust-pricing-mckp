@@ -15,9 +15,13 @@ def is_close(a: float, b: float, tol: float = EPS) -> bool:
 
 
 def safe_div(numer: float, denom: float, default: float = 0.0) -> float:
-    """Safe division with a default for near-zero denominator."""
+    """Divide unless the denominator is exactly zero.
 
-    if abs(denom) <= EPS:
+    Structural preprocessing must not erase a binary64-distinct positive
+    segment merely because it is small relative to a numerical tolerance.
+    """
+
+    if denom == 0.0:
         return default
     return numer / denom
 
@@ -40,5 +44,4 @@ def top_gamma(values: np.ndarray, gamma: int) -> float:
     # partial sort for top-gamma
     idx = np.argpartition(values, -gamma)[-gamma:]
     return float(values[idx].sum())
-
 

@@ -116,3 +116,20 @@ def test_build_local_theta_candidates_preserves_segment_breakpoints() -> None:
     candidates = build_local_theta_candidates(instance, ["a", "a", "b"])
     assert candidates["a"] == pytest.approx([0.0, 2.0, 3.0])
     assert candidates["b"] == pytest.approx([0.0, 1.0])
+
+
+def test_local_theta_candidates_preserve_binary64_distinct_nearby_values() -> None:
+    delta = 9e-11
+    instance = PricingInstance(
+        items=[
+            [Option(1.0, 1.0, 1.0)],
+            [Option(1.0, 1.0, 1.0 + delta)],
+        ],
+        gamma=1,
+    )
+    candidates = build_local_theta_candidates(
+        instance,
+        ["a", "a"],
+        tol=1e-9,
+    )
+    assert candidates["a"] == [0.0, 1.0, 1.0 + delta]

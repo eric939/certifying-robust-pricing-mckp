@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from fractions import Fraction
+import sys
 from typing import List, Sequence, Tuple
 
 import numpy as np
@@ -47,12 +49,12 @@ def merge_equal_cost(points: Sequence[Point]) -> List[Point]:
 
     if not points:
         return []
-    pts = sorted(points, key=lambda p: (p.cost, p.value))
+    pts = sorted(points, key=lambda p: (p.cost, p.value, p.option_index))
     merged: List[Point] = []
     cur = pts[0]
     for p in pts[1:]:
-        if abs(p.cost - cur.cost) <= EPS:
-            if p.value > cur.value + EPS:
+        if p.cost == cur.cost:
+            if p.value > cur.value or (p.value == cur.value and p.option_index < cur.option_index):
                 cur = p
         else:
             merged.append(cur)
@@ -76,14 +78,36 @@ def prune_dominated(points: Sequence[Point]) -> List[Point]:
     filtered: List[Point] = []
     max_val = -np.inf
     for p in points:
-        if p.value > max_val + EPS:
+        if p.value > max_val:
             filtered.append(p)
             max_val = p.value
     return filtered
 
 
-def _cross(o: Point, a: Point, b: Point) -> float:
-    return (a.cost - o.cost) * (b.value - o.value) - (a.value - o.value) * (b.cost - o.cost)
+def _cross_sign(o: Point, a: Point, b: Point) -> int:
+    """Return the exact orientation sign of three binary64 points.
+
+    The fast determinant is accepted only when separated from zero by a
+    conservative roundoff bound. Ambiguous cases use exact rational arithmetic
+    on the input floats, so cancellation cannot alter the hull topology.
+    """
+
+    ac = a.cost - o.cost
+    bv = b.value - o.value
+    av = a.value - o.value
+    bc = b.cost - o.cost
+    left = ac * bv
+    right = av * bc
+    determinant = left - right
+    error_bound = 8.0 * sys.float_info.epsilon * (abs(left) + abs(right))
+    if abs(determinant) > error_bound:
+        return 1 if determinant > 0.0 else -1
+
+    f = Fraction.from_float
+    exact = (f(a.cost) - f(o.cost)) * (f(b.value) - f(o.value)) - (
+        f(a.value) - f(o.value)
+    ) * (f(b.cost) - f(o.cost))
+    return (exact > 0) - (exact < 0)
 
 
 def upper_hull(points: Sequence[Point]) -> List[Point]:
@@ -107,8 +131,7 @@ def upper_hull(points: Sequence[Point]) -> List[Point]:
     upper: List[Point] = []
     for p in pts:
         while len(upper) >= 2:
-            cross = _cross(upper[-2], upper[-1], p)
-            if cross >= -EPS:
+            if _cross_sign(upper[-2], upper[-1], p) >= 0:
                 upper.pop()
             else:
                 break
@@ -157,5 +180,3 @@ def build_upper_hull(costs: np.ndarray, values: np.ndarray, option_indices: np.n
     delta_values = np.diff(values_arr)
     slopes = np.array([safe_div(dv, dc, default=0.0) for dv, dc in zip(delta_values, delta_costs)], dtype=float)
     return Hull(costs=costs_arr, values=values_arr, option_indices=idx_arr, delta_costs=delta_costs, slopes=slopes)
-
-

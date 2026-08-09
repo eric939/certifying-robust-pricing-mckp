@@ -1,6 +1,8 @@
 """Data models for robust MCKP pricing optimization."""
 from __future__ import annotations
 
+import math
+import numbers
 from dataclasses import dataclass, field
 from typing import Iterable, List, Optional, Sequence
 
@@ -21,6 +23,19 @@ class Option:
     uncertainty: float
     price: Optional[float] = None
 
+    def __post_init__(self) -> None:
+        for name in ("value", "margin", "uncertainty"):
+            value = getattr(self, name)
+            if not isinstance(value, numbers.Real) or isinstance(value, bool):
+                raise TypeError(f"{name} must be a real number")
+            if not math.isfinite(float(value)):
+                raise ValueError(f"{name} must be finite")
+        if self.price is not None:
+            if not isinstance(self.price, numbers.Real) or isinstance(self.price, bool):
+                raise TypeError("price must be a real number when provided")
+            if not math.isfinite(float(self.price)):
+                raise ValueError("price must be finite when provided")
+
 
 @dataclass
 class PricingInstance:
@@ -37,6 +52,8 @@ class PricingInstance:
     name: Optional[str] = None
 
     def __post_init__(self) -> None:
+        if not isinstance(self.gamma, numbers.Integral) or isinstance(self.gamma, bool):
+            raise TypeError("gamma must be an integer")
         if self.gamma < 0:
             raise ValueError("gamma must be nonnegative")
         if not self.items:

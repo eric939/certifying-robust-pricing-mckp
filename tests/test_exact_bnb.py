@@ -16,7 +16,9 @@ from robust_mckp.exact_bnb import (
     build_fixed_theta_data,
     cost_for_selection,
     objective_for_selection,
+    nondominated_option_indices,
 )
+from robust_mckp.hull import Point, _cross_sign, build_upper_hull
 
 
 def _instance_from_fixed_theta_points(cost_groups, value_groups, capacity: float) -> PricingInstance:
@@ -97,6 +99,27 @@ def test_equal_cost_and_dominated_options() -> None:
         capacity=5.0,
     )
     _assert_matches_bruteforce(instance)
+
+
+def test_structural_preprocessing_preserves_close_distinct_points() -> None:
+    costs = np.array([0.0, 5e-11])
+    values = np.array([1.0, 1.0 + 5e-11])
+
+    kept = nondominated_option_indices(costs, values, tol=1e-9)
+    hull = build_upper_hull(costs, values, np.array([0, 1]))
+
+    assert kept == [0, 1]
+    assert hull.option_indices.tolist() == [0, 1]
+    assert hull.delta_costs.tolist() == [5e-11]
+
+
+def test_hull_orientation_falls_back_when_binary64_products_cancel() -> None:
+    origin = Point(0.0, 0.0, 0)
+    middle = Point(1e16, 1e16, 1)
+    below = Point(1e16 + 4.0, 1e16 + 2.0, 2)
+    above = Point(1e16 + 2.0, 1e16 + 4.0, 3)
+    assert _cross_sign(origin, middle, below) < 0
+    assert _cross_sign(origin, middle, above) > 0
 
 
 def test_below_hull_option_can_be_integer_optimal() -> None:

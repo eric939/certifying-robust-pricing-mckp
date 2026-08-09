@@ -1,0 +1,45 @@
+{
+  "close_breakpoint_regression": {
+    "candidates": [
+      0.0,
+      1.0,
+      1.00000000009
+    ],
+    "result_status": "optimal",
+    "selected_theta": 1.00000000009
+  },
+  "counts": {
+    "fixed_theta_lp_oracle_checks": 664,
+    "global_floating_oracle_cases": 500,
+    "global_integer_oracle_cases": 500,
+    "hullround_certificate_cases": 1000,
+    "selection_breakpoint_identity_checks": 62039,
+    "sweep_reconstruction_cases": 60
+  },
+  "elapsed_seconds": 2.451908666000236,
+  "environment": {
+    "git_commit": "ac9ad51ea5372f6288f0bbdb862b1812bba96868",
+    "git_status_porcelain": "",
+    "numpy": "2.5.1",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "python": "3.12.12 (main, Dec 17 2025, 21:07:08) [Clang 21.1.4 ]",
+    "scipy": "1.18.0"
+  },
+  "failure_count": 0,
+  "failures": [],
+  "passed": true,
+  "protocol": {
+    "branch_and_bound_comparison_tolerance": 0.0,
+    "cases_per_numeric_family": 500,
+    "lp_cases_per_numeric_family": 50,
+    "lp_feasibility_tolerance": 1e-12,
+    "max_selections_per_instance": 256,
+    "max_thetas_per_instance": 20,
+    "seed": 20260809,
+    "structural_threshold_clustering": false,
+    "sweep_cases_per_numeric_family": 30,
+    "sweep_reconstruction_absolute_tolerance": 1e-09
+  },
+  "purpose": "Paper A mathematical and implementation oracle audit",
+  "schema_version": 1
+}

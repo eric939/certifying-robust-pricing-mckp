@@ -101,3 +101,40 @@ def test_optimized_solver_matches_naive_reference_on_small_instance() -> None:
     assert reference.is_feasible
     assert fast.objective == pytest.approx(reference.objective)
     assert fast.certificate_value == pytest.approx(reference.certificate_value)
+
+
+def test_public_hullround_visits_all_binary64_distinct_breakpoints() -> None:
+    delta = 9e-11
+    instance = PricingInstance(
+        items=[
+            [Option(value=1.0, margin=2.0, uncertainty=1.0)],
+            [Option(value=1.0, margin=2.0, uncertainty=1.0 + delta)],
+        ],
+        gamma=1,
+    )
+
+    solution = solve(instance)
+    instr = solution.metadata["instrumentation"]
+
+    assert solution.is_feasible
+    assert instr["candidate_policy"] == "full_original_binary64_distinct_breakpoints"
+    assert instr["theta_evaluated_count"] == 3
+
+
+@pytest.mark.parametrize(
+    "option",
+    [
+        Option(value=1.0, margin=1.0, uncertainty=0.0),
+    ],
+)
+def test_instance_rejects_noninteger_gamma(option: Option) -> None:
+    with pytest.raises(TypeError, match="gamma must be an integer"):
+        PricingInstance(items=[[option]], gamma=0.5)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize("field", ["value", "margin", "uncertainty", "price"])
+def test_option_rejects_nonfinite_inputs(field: str) -> None:
+    kwargs = {"value": 1.0, "margin": 1.0, "uncertainty": 0.0, "price": 1.0}
+    kwargs[field] = float("nan")
+    with pytest.raises(ValueError, match="finite"):
+        Option(**kwargs)

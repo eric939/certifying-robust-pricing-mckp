@@ -1,95 +1,60 @@
-# Revision History and Scientific Guardrails
+# Revision history and correction disclosure
 
-This file replaces earlier transient worklogs, mock-review reports, claim
-checklists, and final-gate notes. It is intentionally short and should record
-only durable facts needed by future maintainers.
+## August 2026 definitive Paper A revision
 
-## Current Paper Positioning
+This revision freezes the contribution as a certifying framework for
+finite-menu, integer-budget Γ-robust discrete pricing. It does not claim the
+classical Bertsimas–Sim scalar threshold representation, finite deviation
+enumeration, or MCKP hull geometry as new in isolation. It also excludes Paper
+B's simultaneous interval/group-envelope bound.
 
-The manuscript is framed as a certifying decomposition framework for
-finite-menu integer-budget \(\Gamma\)-robust MCKP:
+The final manuscript replaces inherited single-seed numerical and stylized
+application claims with one dated multi-seed controlled evidence release.
+Every reported number is generated from its canonical CSV/JSON files. The
+paper now distinguishes exact-arithmetic theorems, binary64 implementation
+checks, independent solver comparisons, and observational timing.
 
-- exact full-original-breakpoint \(\theta\) enumeration,
-- fixed-\(\theta\) upper-hull LP certificates,
-- robust-feasible HullRound one-item additive certificate,
-- exact \(\theta\)-enumerated branch-and-bound with valid gap accounting,
-- parametric sweep diagnostics over the same full breakpoint set,
-- diagnostic insight rather than general-purpose solver replacement.
+## Discovered threshold-clustering counterexample
 
-Discrete pricing is the motivating and illustrative application. The pricing
-study is controlled/semi-synthetic and should not be described as
-transaction-level scanner-data validation, causal demand estimation, or
-commercial pricing performance evidence.
+During the Paper A/Paper B split, the recovered implementation was found to
+merge threshold candidates within solver tolerance. That contradicted the
+full-original-breakpoint theorem. A 100-group, Γ=1 instance with deviations
+`1` and `1 + 9e-11` makes the larger breakpoint uniquely necessary for
+feasibility; clustering at `1e-9` can therefore produce a false infeasibility
+report.
 
-## Non-Negotiable Correctness Rules
+The final implementation preserves zero and every binary64-distinct original
+deviation. Structural dominance, equal-cost merging, event activation, and
+zero-length tests use exact binary64 comparisons. Numerical tolerances remain
+only in solver feasibility/bound comparisons and are disclosed separately.
+Permanent regression and mathematical-audit cases record the counterexample.
 
-- Exact global mode uses the full set
-  `B = {0} union {|t_ij|}` over original admissible options.
-- Reduced \(\theta\) sets may be used only for heuristic diagnostics, not for
-  exactness claims.
-- Upper hulls are LP-bound objects. They are not integer-safe preprocessing.
-- Exact branch-and-bound must preserve original non-dominated integer options,
-  including below-hull options.
-- Integer-safe pruning may remove only same-item options with no larger
-  fixed-\(\theta\) cost and no smaller value, with at least one strict
-  improvement.
-- Every reported robust incumbent must pass the direct sorted-\(\Gamma\)
-  certificate check.
-- A finite limited-run global gap is valid only when every \(\theta\) has a
-  valid upper-bound record.
-- Limited rows are valid-gap diagnostics, not optima.
-- The implemented scope is integer \(\Gamma\in\{0,\ldots,n\}\); fractional
-  Bertsimas--Sim budgets require additional theory and tests.
+## Other material corrections
 
-## Latest Revision Pass
+- Corrected Dyer's DOI from an unrelated record to
+  `10.1007/BF02591729`.
+- Fixed the finite-breakpoint proof on the final unbounded interval.
+- Restored the fixed-threshold LP baseline-value constant.
+- Clarified that the continuous segment representation has the same optimum;
+  density-ordered prefix structure supplies the mapping.
+- Defined the efficient concave upper frontier precisely.
+- Removed the false guarantee that optional round-up repair must succeed.
+- Strengthened the conditions for the conditional relative `O(1/n)` bound.
+- Kept below-hull non-dominated options in exact integer search.
+- Required an upper-bound record for every original threshold before reporting
+  a finite global anytime gap.
 
-Date: 2026-05-22.
+The immutable v1 source and PDF remain under `paper/archive/`; they were not
+modified.
 
-Changes:
+## Recorded pre-release failed gate
 
-- Strengthened the manuscript novelty map and global exactness/gap theorem.
-- Updated the exact global solver to initialize root LP upper-bound records for
-  every \(\theta\) before reporting finite global gaps.
-- Added tests for the per-\(\theta\) upper-bound-record invariant under limited
-  global runs.
-- Added HullRound diagnostics for \(\Delta V_{\max}^{\theta}\), realized
-  round-down loss, and scale-normalized certificate strength.
-- Added `delta_v_max_over_lp_ub` to publishable experiment CSV generation.
-- Clarified the split between public GitHub code and the exact local
-  submission artifact snapshot.
-- Synced rebuilt public/blind manuscript source and PDFs into
-  `submission_ready/`.
-
-Validation commands run:
-
-```bash
-.venv/bin/python -m pytest -q
-cd paper_versions/v2 && tectonic --keep-logs main_v2.tex
-cd paper_versions/v2 && tectonic --keep-logs main_v2_blind.tex
-.venv/bin/python scripts/run_clean_repro_check.py --quick
-.venv/bin/python scripts/run_solver_benchmarks.py --smoke --exact-only --theta-time-limit 2 --full-time-limit 2 --fixed-time-limit 2
-```
-
-Observed results:
-
-- Full test suite passed: 82 tests.
-- Public and blind manuscript builds passed.
-- Public PDF text grep found no stale section/reference wording checked in
-  `SUBMISSION.md`.
-- Blind PDF strict identity regex found no author, institution, GitHub, or
-  arXiv self-identification leaks.
-- Clean reproducibility smoke check passed.
-- Open-solver smoke completed; SCIP and HiGHS were available, Gurobi and CPLEX
-  were unavailable.
-
-## Remaining Scientific Limits
-
-- Full publication benchmark numbers were not regenerated in the latest pass.
-  Do not change numerical claims unless the corresponding scripts are rerun.
-- SCIP/HiGHS remain strong median-runtime baselines in the tested environment.
-  The paper should not claim general runtime dominance over mature MILP
-  solvers.
-- Tight-capacity rows are the main exact-solver bottleneck.
-- The semi-synthetic pricing application is own-price separable and controlled
-  by construction; cross-price substitution and transaction-level validation
-  remain future work.
+The first 1,000-instance mathematical-audit run on 2026-08-09 failed four LP
+checks from one widely scaled floating-point instance. The audit had forced a
+zero feasibility tolerance, and algebraically equivalent accumulation paths
+differed at roundoff scale; the independent HiGHS LP remained feasible. No
+threshold was missing and all global branch-and-bound results still matched
+exhaustive enumeration. The audit protocol was corrected to use a separately
+recorded `1e-12` LP-feasibility tolerance while keeping candidate construction,
+dominance, and breakpoint identity exact. The failed report is retained in the
+development record and was not used as release evidence.

@@ -18,7 +18,7 @@ from .exact_bnb import (
     solve_fixed_theta_bnb,
 )
 from .model import PricingInstance
-from .utils import EPS, top_gamma
+from .utils import top_gamma
 
 
 @dataclass(frozen=True)
@@ -102,9 +102,11 @@ def robust_certificate_segment_local(
 def build_local_theta_candidates(
     instance: PricingInstance,
     segments: Sequence[object],
-    tol: float = EPS,
+    tol: Optional[float] = None,
 ) -> Dict[object, List[float]]:
-    """Build segment-wise full breakpoint sets `B_g`."""
+    """Build binary64-distinct segment-wise full breakpoint sets ``B_g``."""
+
+    del tol
 
     labels = list(dict.fromkeys(segments))
     if len(segments) != instance.n_items:
@@ -113,19 +115,7 @@ def build_local_theta_candidates(
     for i, group in enumerate(instance.items):
         g = segments[i]
         candidates[g].extend(abs(float(opt.uncertainty)) for opt in group)
-    out: Dict[object, List[float]] = {}
-    for g, vals in candidates.items():
-        vals_sorted = sorted(vals)
-        deduped: List[float] = []
-        for val in vals_sorted:
-            if not deduped or abs(float(val) - deduped[-1]) > tol:
-                deduped.append(float(val))
-        if not deduped or abs(deduped[0]) > tol:
-            deduped.insert(0, 0.0)
-        else:
-            deduped[0] = 0.0
-        out[g] = deduped
-    return out
+    return {g: sorted({float(value) for value in vals}) for g, vals in candidates.items()}
 
 
 def _build_local_fixed_theta_data(

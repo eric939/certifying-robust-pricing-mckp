@@ -147,7 +147,8 @@ def _same_point_set(
         return False
     if prev_costs.shape != costs.shape or prev_values.shape != values.shape:
         return False
-    return bool(np.allclose(prev_costs, costs, atol=tol, rtol=0.0) and np.allclose(prev_values, values, atol=tol, rtol=0.0))
+    del tol
+    return bool(np.array_equal(prev_costs, costs) and np.array_equal(prev_values, values))
 
 
 def _hulls_equal(a: Hull, b: Hull, tol: float) -> bool:
@@ -228,7 +229,7 @@ def _build_cache_from_sweep_data(
         hull_base_value.append(float(hull.values[0]) if hull.values.size else float("-inf"))
         max_value.append(float(max(float(data.values[i][j]) for j in opts)) if opts else float("-inf"))
         for k, (slope, length) in enumerate(zip(hull.slopes, hull.delta_costs)):
-            if float(length) > tol:
+            if float(length) > 0.0:
                 global_segments.append(CachedHullSegment(item=i, index=k, slope=float(slope), length=float(length)))
         next_point_costs.append(costs)
         next_point_values.append(values)
@@ -290,7 +291,7 @@ def iter_parametric_theta_states(
             update_start = time.perf_counter()
             delta = theta - previous_theta
             for k, abs_t in enumerate(abs_uncertainties):
-                s_theta[k] = s_theta[k] + float(delta) * (abs_t > previous_theta + effective_tol)
+                s_theta[k] = s_theta[k] + float(delta) * (abs_t > previous_theta)
             update_time = time.perf_counter() - update_start
 
         baseline_start = time.perf_counter()
