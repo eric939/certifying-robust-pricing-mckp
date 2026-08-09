@@ -1,0 +1,19 @@
+{
+  "bnb_numerical_tolerance": 1e-09,
+  "design": {
+    "certificate": "5 seeds x n={30,60,120} x distinct Gamma={0,floor(sqrt(n)),floor(0.1n)}, m=10",
+    "exact": "5 seeds x n={12,20,30} x distinct Gamma={0,floor(sqrt(n)),floor(0.1n)}, m=8",
+    "scalability": "3 seeds x n={30,60,120,200} x m={8,16}, Gamma=floor(sqrt(n))"
+  },
+  "final_feasibility_check": "exact sign of direct sorted-Gamma certificate over binary64 input coefficients",
+  "git_commit": "b65e5660a6522c75a49857d3a6841408bc20d7f0",
+  "git_status_porcelain_at_start": "",
+  "numpy": "2.5.1",
+  "platform": "macOS-27.0-arm64-arm-64bit",
+  "purpose": "Canonical final Paper A controlled evidence release",
+  "python": "3.12.12 (main, Dec 17 2025, 21:07:08) [Clang 21.1.4 ]",
+  "quick": false,
+  "schema_version": 1,
+  "structural_threshold_clustering": false,
+  "timing_policy": "single-process wall clock; observational only"
+}

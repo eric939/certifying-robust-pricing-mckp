@@ -84,3 +84,5 @@ results/*
 results/release/*
 !results/release/2026-08-09-paper-a-final/
 !results/release/2026-08-09-paper-a-final/**
+!results/release/2026-08-09-paper-a-final-r2/
+!results/release/2026-08-09-paper-a-final-r2/**
