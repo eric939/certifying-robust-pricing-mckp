@@ -76,7 +76,7 @@ def verify_identity() -> None:
         raise RuntimeError("pdftotext is unavailable")
     public_text = subprocess.check_output([pdftotext, str(PAPER / "main.pdf"), "-"], text=True)
     blind_text = subprocess.check_output([pdftotext, str(PAPER / "main_blind.pdf"), "-"], text=True)
-    if "Zi Yuan Eric Shao" not in public_text or "github.com/eric939/robust_pricing_mckp" not in public_text:
+    if "Zi Yuan Eric Shao" not in public_text or "github.com/eric939/certifying-robust-pricing-mckp" not in public_text:
         raise RuntimeError("public build is missing author or repository identity")
     patterns = [
         r"\bEric\b", r"\bShao\b", r"ershao", r"ETH Z(?:ü|u)rich",

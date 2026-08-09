@@ -20,7 +20,7 @@ not claimed as new in isolation.
 ## Paper A and Paper B
 
 Paper A exposes and certifies the complete family of fixed-threshold MCKPs. The
-separate [Paper B repository](https://github.com/eric939/robust_mckp) starts
+separate [Paper B repository](https://github.com/eric939/simultaneous-group-envelope-mckp) starts
 from that family and develops simultaneous interval/group-envelope bounds over
 many thresholds. Paper B therefore has different main theorems, algorithms,
 evidence, and a separate arXiv record. See [PAPER_LINEAGE.md](PAPER_LINEAGE.md).

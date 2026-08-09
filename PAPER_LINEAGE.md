@@ -1,13 +1,13 @@
 # Paper lineage and contribution boundary
 
-This repository is **Paper A**, the continuation of
-arXiv:2603.18653, *Robust Discrete Pricing Optimization via Multiple-Choice
-Knapsack Reductions*. Its next public manuscript is intended to replace that
-record as version 2 after the source, evidence, and release gates are complete.
+This repository is **Paper A**, the definitive version-2 continuation of
+arXiv:2603.18653, *A Certifying MCKP Framework for Gamma-Robust Discrete
+Pricing*. Its source, evidence, and release gates are complete and the verified
+package is ready for upload to the existing arXiv record.
 
-The separate repository `eric939/robust_mckp` is **Paper B**, *Simultaneous
-Group-Envelope Bounds for Gamma-Robust Multiple-Choice Knapsack Problems*. It
-will receive a new arXiv identifier.
+The separate repository `eric939/simultaneous-group-envelope-mckp` is
+**Paper B**, *Simultaneous Group-Envelope Bounds for Gamma-Robust
+Multiple-Choice Knapsack Problems*. It will receive a new arXiv identifier.
 
 ## Paper A owns
 
