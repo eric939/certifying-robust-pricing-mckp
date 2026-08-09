@@ -1,0 +1,15 @@
+.DS_Store
+.venv/
+.pytest_cache/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.egg-info/
+data_cache/
+output/
+results/local/
+results/clean_repro_check/
+*.log
+*.aux
+*.out
+*.toc

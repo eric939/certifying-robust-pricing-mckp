@@ -1,0 +1,27 @@
+{
+  "certificate_feasible_rows": 45,
+  "certificate_rows": 45,
+  "exact_bnb_optimal_rows": 45,
+  "exact_comparison_rows": 45,
+  "highs_certified_rows": 45,
+  "largest_tested_m": 16,
+  "largest_tested_n": 200,
+  "mathematical_audit_counts": {
+    "fixed_theta_lp_oracle_checks": 664,
+    "global_floating_oracle_cases": 500,
+    "global_integer_oracle_cases": 500,
+    "hullround_certificate_cases": 1000,
+    "selection_breakpoint_identity_checks": 62039,
+    "sweep_reconstruction_cases": 60
+  },
+  "mathematical_audit_passed": true,
+  "max_bnb_highs_absolute_difference": 1.4115357771515846e-09,
+  "max_hull_lp_highs_absolute_difference": 2.3283064365386963e-10,
+  "max_hullround_gap_to_optimum": 0.0010780696588740947,
+  "max_rounding_loss_over_bound": 0.5348418393219815,
+  "median_hull_fraction": 1.0,
+  "median_hullround_gap_to_optimum": 7.869736926682855e-05,
+  "rounding_bound_rows": 45,
+  "scalability_feasible_rows": 24,
+  "scalability_rows": 24
+}
