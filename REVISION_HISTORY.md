@@ -46,3 +46,15 @@ Permanent regression and mathematical-audit cases record the counterexample.
 
 The immutable v1 source and PDF remain under `paper/archive/`; they were not
 modified.
+
+## Recorded pre-release failed gate
+
+The first 1,000-instance mathematical-audit run on 2026-08-09 failed four LP
+checks from one widely scaled floating-point instance. The audit had forced a
+zero feasibility tolerance, and algebraically equivalent accumulation paths
+differed at roundoff scale; the independent HiGHS LP remained feasible. No
+threshold was missing and all global branch-and-bound results still matched
+exhaustive enumeration. The audit protocol was corrected to use a separately
+recorded `1e-12` LP-feasibility tolerance while keeping candidate construction,
+dominance, and breakpoint identity exact. The failed report is retained in the
+development record and was not used as release evidence.

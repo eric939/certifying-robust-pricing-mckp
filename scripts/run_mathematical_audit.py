@@ -189,7 +189,9 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
 
             if case < args.lp_cases:
                 for theta in candidates[: args.max_thetas_per_instance]:
-                    bound = compute_fixed_theta_lp_upper_bound(instance, theta, tol=0.0)
+                    bound = compute_fixed_theta_lp_upper_bound(
+                        instance, theta, tol=args.lp_feasibility_tolerance
+                    )
                     oracle_status, oracle_value = _lp_oracle(instance, theta)
                     counts["fixed_theta_lp_oracle_checks"] += 1
                     if oracle_status == "optimal":
@@ -287,6 +289,7 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
             "max_selections_per_instance": args.max_selections_per_instance,
             "max_thetas_per_instance": args.max_thetas_per_instance,
             "branch_and_bound_comparison_tolerance": 0.0,
+            "lp_feasibility_tolerance": args.lp_feasibility_tolerance,
             "sweep_reconstruction_absolute_tolerance": args.sweep_validation_tolerance,
             "structural_threshold_clustering": False,
         },
@@ -320,6 +323,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-selections-per-instance", type=int, default=256)
     parser.add_argument("--max-thetas-per-instance", type=int, default=20)
     parser.add_argument("--sweep-validation-tolerance", type=float, default=1e-9)
+    parser.add_argument("--lp-feasibility-tolerance", type=float, default=1e-12)
     parser.add_argument("--max-failure-records", type=int, default=100)
     parser.add_argument("--output", type=Path, required=True)
     return parser.parse_args()
