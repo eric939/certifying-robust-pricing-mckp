@@ -555,3 +555,23 @@ def test_two_item_local_incumbent_neighborhood_is_feasible_and_exact() -> None:
     assert res.objective_value == pytest.approx(brute.objective_value)
     assert res.validation_flags["capacity_feasible"]
     assert res.diagnostics["local_incumbent_pair_evaluations"] >= 0
+
+
+def test_fixed_theta_solver_preserves_cancelling_positive_capacity() -> None:
+    instance = PricingInstance(
+        items=[
+            [Option(1.0, -1e16, 0.0)],
+            [Option(2.0, 1.0, 0.0)],
+            [Option(3.0, 1e16, 0.0)],
+            [Option(4.0, -0.5, 0.0)],
+        ],
+        gamma=0,
+    )
+    result = solve_fixed_theta_bnb(
+        instance,
+        0.0,
+        FixedThetaBNBConfig(tolerance=1e-12, use_greedy_incumbent=False),
+    )
+    assert result.status == "optimal"
+    assert result.objective_value == pytest.approx(10.0)
+    assert result.selected_options == [0, 0, 0, 0]
