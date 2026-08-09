@@ -295,7 +295,15 @@ def iter_parametric_theta_states(
             update_time = time.perf_counter() - update_start
 
         baseline_start = time.perf_counter()
-        data = _build_data_from_s_theta(values, s_theta, instance.gamma, theta)
+        incremental_data = _build_data_from_s_theta(
+            values, s_theta, instance.gamma, theta
+        )
+        # Fixed-threshold pruning must use the same outward-relaxed floating
+        # representation and exact scaled-integer feasibility data as
+        # independent enumeration.  The incremental state is therefore a
+        # checked acceleration diagnostic; it is never authoritative for a
+        # certifying LP bound.
+        data = build_fixed_theta_data(instance, theta)
         baseline_time = time.perf_counter() - baseline_start
 
         validate_this = bool(cfg.validate_against_recompute) and (
@@ -305,16 +313,32 @@ def iter_parametric_theta_states(
         max_cost_error = 0.0
         max_capacity_error = 0.0
         if validate_this:
-            direct = build_fixed_theta_data(instance, theta)
+            direct_s_theta = [
+                s - np.maximum(0.0, abs_t - theta)
+                for s, abs_t in zip(margins, abs_uncertainties)
+            ]
+            direct = _build_data_from_s_theta(
+                values, direct_s_theta, instance.gamma, theta
+            )
             max_s_error = max(
                 [0.0]
-                + [float(np.max(np.abs(a - b))) for a, b in zip(data.s_theta, direct.s_theta) if a.size]
+                + [
+                    float(np.max(np.abs(a - b)))
+                    for a, b in zip(incremental_data.s_theta, direct.s_theta)
+                    if a.size
+                ]
             )
             max_cost_error = max(
                 [0.0]
-                + [float(np.max(np.abs(a - b))) for a, b in zip(data.costs, direct.costs) if a.size]
+                + [
+                    float(np.max(np.abs(a - b)))
+                    for a, b in zip(incremental_data.costs, direct.costs)
+                    if a.size
+                ]
             )
-            max_capacity_error = abs(float(data.capacity) - float(direct.capacity))
+            max_capacity_error = abs(
+                float(incremental_data.capacity) - float(direct.capacity)
+            )
             if max(max_s_error, max_cost_error, max_capacity_error) > 10.0 * effective_tol:
                 raise ValueError(
                     "parametric sweep state differs from independent recomputation "

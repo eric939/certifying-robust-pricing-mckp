@@ -196,6 +196,33 @@ def test_sweep_rejects_negative_gamma_certificate_inside_solver_tolerance() -> N
     assert not result.validation_flags["robust_certificate_feasible"]
 
 
+def test_sweep_uses_exact_safe_canonical_state_under_capacity_cancellation() -> None:
+    instance = PricingInstance(
+        items=[
+            [Option(1.0, -1e16, 0.0)],
+            [Option(2.0, 1.0, 0.0)],
+            [Option(3.0, 1e16, 0.0)],
+            [Option(4.0, -0.5, 0.0)],
+        ],
+        gamma=0,
+    )
+    result = solve_global_theta_bnb_sweep(
+        instance,
+        GlobalThetaBNBConfig(
+            tolerance=1e-12,
+            theta_order="increasing",
+            use_hullround_incumbent=False,
+        ),
+        ParametricThetaSweepConfig(
+            tol=1e-12,
+            validate_against_recompute=True,
+        ),
+    )
+    assert result.status == "optimal"
+    assert result.objective_value == pytest.approx(10.0)
+    assert result.selected_options == [0, 0, 0, 0]
+
+
 def test_exact_sweep_matches_bruteforce_tiny_grid() -> None:
     instance = PricingInstance(
         items=[
