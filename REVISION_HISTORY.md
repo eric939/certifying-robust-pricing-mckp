@@ -1,5 +1,17 @@
 # Revision history and correction disclosure
 
+## 2026-08-09 — Public repository identity finalized
+
+- Renamed the public repository and local project folder to
+  `certifying-robust-pricing-mckp`, matching Paper A's certifying pricing
+  contribution and distinguishing it from Paper B.
+- Updated the manuscript data-availability URL, citation metadata, project
+  metadata, lineage document, and release identity gate. No mathematical,
+  algorithmic, experimental, or evidence content changed.
+- The arXiv source package and both PDFs must be rebuilt and reverified after
+  this administrative change; their new checksums supersede the pre-rename
+  local package checksums.
+
 ## August 2026 definitive Paper A revision
 
 This revision freezes the contribution as a certifying framework for
