@@ -50,7 +50,7 @@ from experiments_case_retail.case_retail_pricing import (  # noqa: E402
     simulate_iid_exact as retail_simulate_iid,
 )
 from robust_mckp import PricingInstance, solve  # noqa: E402
-from robust_mckp.certificate import compute_certificate  # noqa: E402
+from robust_mckp.certificate import certificate_is_feasible, compute_certificate  # noqa: E402
 from robust_mckp.greedy import greedy_lp  # noqa: E402
 from robust_mckp.utils import EPS  # noqa: E402
 
@@ -209,7 +209,8 @@ def hullround_metrics(instance: PricingInstance, *, validate_lp: bool = False) -
             lp_highs_obj = float(highs["objective"])
             lp_highs_abs_diff = abs(lp_highs_obj - float(lp.lp_value))
 
-    if cert < -1e-7:
+    certificate_feasible = certificate_is_feasible(instance, sol.selections)
+    if not certificate_feasible:
         raise AssertionError(f"certificate violation: {cert}")
     if frac_count > 1:
         raise AssertionError(f"LP has more than one fractional item: {frac_count}")
@@ -231,6 +232,7 @@ def hullround_metrics(instance: PricingInstance, *, validate_lp: bool = False) -
         "gap_lp": l_rd / float(lp.lp_value) if abs(lp.lp_value) > EPS else float("nan"),
         "n_gap_lp": instance.n_items * l_rd / float(lp.lp_value) if abs(lp.lp_value) > EPS else float("nan"),
         "certificate_value": float(cert),
+        "certificate_feasible": bool(certificate_feasible),
         "runtime_total_s": float(sol.elapsed),
         "fractional_items": int(frac_count),
         "candidate_count_raw": int(instr.get("candidate_count_raw", 0)),
@@ -443,7 +445,9 @@ def solve_full_robust_highs(
         cert = compute_certificate(instance, selections)
     return {
         "status": highs_status_name(status),
-        "certified": status == 0 and selections is not None and cert >= -1e-7,
+        "certified": status == 0
+        and selections is not None
+        and certificate_is_feasible(instance, selections),
         "objective": objective,
         "runtime_s": runtime,
         "mip_gap": float(getattr(res, "mip_gap", float("nan"))),
@@ -505,7 +509,10 @@ def solve_fixed_theta_highs(
         cost_used = float(sum(costs[i][j] for i, j in enumerate(selections)))
     return {
         "status": highs_status_name(status),
-        "certified": status == 0 and selections is not None and cert >= -1e-7 and cost_used <= capacity + 1e-7,
+        "certified": status == 0
+        and selections is not None
+        and certificate_is_feasible(instance, selections)
+        and cost_used <= capacity,
         "objective": objective,
         "runtime_s": runtime,
         "mip_gap": float(getattr(res, "mip_gap", float("nan"))),
@@ -553,7 +560,7 @@ def solve_theta_enum_highs(
     cert = compute_certificate(instance, best_sel) if best_sel is not None else float("nan")
     return {
         "status": "OPTIMAL" if best_sel is not None else "NO_FEASIBLE_THETA",
-        "certified": best_sel is not None and cert >= -1e-7,
+        "certified": best_sel is not None and certificate_is_feasible(instance, best_sel),
         "objective": float(best_obj),
         "runtime_s": time.perf_counter() - t0,
         "theta_count": int(candidates.size),

@@ -1,6 +1,7 @@
 """Utility helpers for robust MCKP."""
 from __future__ import annotations
 
+import math
 from typing import Iterable, List, Sequence, Tuple
 
 import numpy as np
@@ -40,8 +41,7 @@ def top_gamma(values: np.ndarray, gamma: int) -> float:
     if gamma <= 0:
         return 0.0
     if gamma >= values.size:
-        return float(values.sum())
+        return float(math.fsum(float(value) for value in values))
     # partial sort for top-gamma
     idx = np.argpartition(values, -gamma)[-gamma:]
-    return float(values[idx].sum())
-
+    return float(math.fsum(float(values[i]) for i in idx))

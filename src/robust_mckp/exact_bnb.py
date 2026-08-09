@@ -10,7 +10,7 @@ from typing import Callable, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 
-from .certificate import compute_certificate
+from .certificate import certificate_is_feasible, compute_certificate
 from .greedy import ItemLPPosition, LPSolution, greedy_lp
 from .hull import Hull, build_upper_hull
 from .model import PricingInstance
@@ -884,16 +884,16 @@ def _build_free_hulls(
 def _position_from_hull_cost(hull: Hull, cost: float) -> ItemLPPosition:
     costs = hull.costs
     values = hull.values
-    if cost <= costs[0] + EPS:
+    if cost <= costs[0]:
         return ItemLPPosition(lower_vertex=0, upper_vertex=0, lambda_=0.0, cost=float(costs[0]), value=float(values[0]))
-    if cost >= costs[-1] - EPS:
+    if cost >= costs[-1]:
         last = len(costs) - 1
         return ItemLPPosition(lower_vertex=last, upper_vertex=last, lambda_=0.0, cost=float(costs[-1]), value=float(values[-1]))
     k = int(np.searchsorted(costs, cost, side="right") - 1)
     k = max(0, min(k, len(costs) - 2))
     c0 = float(costs[k])
     c1 = float(costs[k + 1])
-    lam = 0.0 if abs(c1 - c0) <= EPS else (float(cost) - c0) / (c1 - c0)
+    lam = 0.0 if c1 == c0 else (float(cost) - c0) / (c1 - c0)
     lam = float(min(1.0, max(0.0, lam)))
     v0 = float(values[k])
     v1 = float(values[k + 1])
@@ -1030,19 +1030,19 @@ def _compute_bound_fast(
     extra_costs = np.zeros(len(theta_cache.per_item_hulls), dtype=float) if need_solution else None
 
     for seg in theta_cache.global_segments:
-        if residual <= tol:
+        if residual <= 0.0:
             break
         if fixed[seg.item] >= 0:
             continue
         take = min(float(seg.length), residual)
-        if take <= tol:
+        if take <= 0.0:
             continue
         if extra_costs is not None:
             extra_costs[seg.item] += take
         extra_value += take * float(seg.slope)
         filled += take
         residual -= take
-        if take + tol < float(seg.length):
+        if take < float(seg.length):
             fractional_global_item = int(seg.item)
             fractional_lambda = float(take / float(seg.length))
             break
@@ -1938,7 +1938,7 @@ def _validate_global_selection(instance: PricingInstance, selections: Optional[S
         "valid_selection_length": bool(valid_length),
         "valid_selection_indices": bool(valid_indices),
         "objective_matches": bool(valid_indices and abs(obj - objective_value) <= tol),
-        "robust_certificate_feasible": bool(valid_indices and cert >= -tol),
+        "robust_certificate_feasible": bool(valid_indices and certificate_is_feasible(instance, selections)),
     }
 
 
@@ -2057,7 +2057,7 @@ def solve_global_theta_bnb(
     if cfg.use_hullround_incumbent:
         try:
             hr = solve_hullround(instance, upgrade_completion=True)
-            if hr.is_feasible and hr.selections and compute_certificate(instance, hr.selections) >= -tol:
+            if hr.is_feasible and hr.selections and certificate_is_feasible(instance, hr.selections):
                 incumbent_selection = list(map(int, hr.selections))
                 incumbent_value = float(hr.objective)
                 incumbent_theta = float(hr.theta)
@@ -2184,7 +2184,7 @@ def solve_global_theta_bnb(
             if not (flags["valid_length"] and flags["valid_indices"] and flags["capacity_feasible"]):
                 continue
             cert = compute_certificate(instance, sel)
-            if cert < -tol:
+            if not certificate_is_feasible(instance, sel):
                 continue
             seed_robust_feasible += 1
             if val > incumbent_value + tol:
@@ -2247,7 +2247,7 @@ def solve_global_theta_bnb(
                     if flags["valid_length"] and flags["valid_indices"] and flags["capacity_feasible"]:
                         heuristic_fixed_feasible += 1
                         cert = compute_certificate(instance, sel)
-                        if cert >= -tol:
+                        if certificate_is_feasible(instance, sel):
                             heuristic_robust_feasible += 1
                             robust_value = float(val)
                             if robust_value > incumbent_value + tol:
@@ -2446,7 +2446,8 @@ def solve_global_theta_bnb(
                     root_lp_status=lp_bound.root_lp_status,
                     incumbent_after_theta=incumbent_value,
                     root_lp_runtime_seconds=lp_bound.runtime_seconds,
-                    robust_certificate_passed=incumbent_selection is not None and compute_certificate(instance, incumbent_selection) >= -tol,
+                    robust_certificate_passed=incumbent_selection is not None
+                    and certificate_is_feasible(instance, incumbent_selection),
                 )
             )
             continue
@@ -2528,13 +2529,13 @@ def solve_global_theta_bnb(
         robust_passed = False
         if bnb.selected_options is not None and bnb.objective_value > incumbent_value + tol:
             cert = compute_certificate(instance, bnb.selected_options)
-            if cert >= -tol:
+            if certificate_is_feasible(instance, bnb.selected_options):
                 incumbent_selection = list(map(int, bnb.selected_options))
                 incumbent_value = float(bnb.objective_value)
                 incumbent_theta = float(theta)
                 robust_passed = True
         elif bnb.selected_options is not None:
-            robust_passed = compute_certificate(instance, bnb.selected_options) >= -tol
+            robust_passed = certificate_is_feasible(instance, bnb.selected_options)
 
         records.append(
             GlobalThetaRecord(
@@ -2703,7 +2704,7 @@ def brute_force_global_robust(instance: PricingInstance, tol: float = EPS) -> Gl
     best_obj = float("-inf")
     for combo in itertools.product(*[range(len(group)) for group in instance.items]):
         cert = compute_certificate(instance, combo)
-        if cert < -tol:
+        if not certificate_is_feasible(instance, combo):
             continue
         obj = _robust_objective(instance, combo)
         if obj > best_obj + tol or (abs(obj - best_obj) <= tol and list(combo) < (best_sel or [math.inf])):

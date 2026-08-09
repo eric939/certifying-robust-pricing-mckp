@@ -36,7 +36,7 @@ from experiments_nested._common import (  # noqa: E402
     make_master_portfolio,
 )
 from robust_mckp import GlobalThetaBNBConfig, solve  # noqa: E402
-from robust_mckp.certificate import compute_certificate  # noqa: E402
+from robust_mckp.certificate import certificate_is_feasible, compute_certificate  # noqa: E402
 from robust_mckp.exact_bnb import solve_global_theta_bnb  # noqa: E402
 from scripts.run_publishable_experiments import (  # noqa: E402
     hullround_metrics,
@@ -125,6 +125,7 @@ def exact_comparisons(quick: bool) -> List[Dict[str, Any]]:
                         "hullround_objective": float(hr.objective),
                         "hullround_relative_gap_to_bnb": hr_gap,
                         "hullround_robust_residual": float(compute_certificate(instance, hr.selections)),
+                        "hullround_certificate_feasible": bool(hr.is_feasible),
                     }
                 )
     return rows
@@ -167,6 +168,9 @@ def scalability_study(quick: bool) -> List[Dict[str, Any]]:
                         "runtime_seconds": float(sol.elapsed),
                         "objective": float(sol.objective),
                         "robust_residual": float(compute_certificate(instance, sol.selections)),
+                        "certificate_feasible": bool(
+                            sol.is_feasible and certificate_is_feasible(instance, sol.selections)
+                        ),
                         "candidate_count": int(instr.get("candidate_count_raw", 0)),
                         "theta_evaluated_count": int(instr.get("theta_evaluated_count", 0)),
                         "median_raw_options": _median(raw),
@@ -187,12 +191,12 @@ def _summary(exact: Sequence[Dict[str, Any]], cert: Sequence[Dict[str, Any]], sc
         "median_hullround_gap_to_optimum": _median(r["hullround_relative_gap_to_bnb"] for r in exact),
         "max_hullround_gap_to_optimum": _maximum(r["hullround_relative_gap_to_bnb"] for r in exact),
         "certificate_rows": len(cert),
-        "certificate_feasible_rows": sum(float(r["certificate_value"]) >= -1e-7 for r in cert),
+        "certificate_feasible_rows": sum(bool(r["certificate_feasible"]) for r in cert),
         "rounding_bound_rows": sum(float(r["l_rd"]) <= float(r["delta_v_max_theta"]) + 1e-7 for r in cert),
         "max_rounding_loss_over_bound": _maximum(r["l_rd_over_delta"] for r in cert),
         "max_hull_lp_highs_absolute_difference": _maximum(r["lp_highs_abs_diff"] for r in cert),
         "scalability_rows": len(scale),
-        "scalability_feasible_rows": sum(float(r["robust_residual"]) >= -1e-7 for r in scale),
+        "scalability_feasible_rows": sum(bool(r["certificate_feasible"]) for r in scale),
         "largest_tested_n": max(int(r["n"]) for r in scale),
         "largest_tested_m": max(int(r["m"]) for r in scale),
         "median_hull_fraction": _median(r["median_hull_fraction"] for r in scale),
@@ -319,7 +323,7 @@ def run(args: argparse.Namespace) -> None:
         "numpy": np.__version__,
         "structural_threshold_clustering": False,
         "bnb_numerical_tolerance": 1e-9,
-        "final_feasibility_check": "direct sorted-Gamma certificate",
+        "final_feasibility_check": "exact sign of direct sorted-Gamma certificate over binary64 input coefficients",
         "timing_policy": "single-process wall clock; observational only",
         "design": {
             "exact": "5 seeds x n={12,20,30} x distinct Gamma={0,floor(sqrt(n)),floor(0.1n)}, m=8",

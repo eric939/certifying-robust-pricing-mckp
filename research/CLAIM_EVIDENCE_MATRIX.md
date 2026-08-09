@@ -26,5 +26,5 @@ Status values: `pending`, `verified`, `revised`, `removed`, `blocked`.
 | A-E5 | Controlled pricing instances display a revenue--protection tradeoff. | observation | Dated semi-synthetic protocol/raw results; no causal or field claim. | removed |
 | A-L1 | MCKP LP geometry and exact methods are classical. | literature | Primary original papers/publisher metadata with locators. | verified |
 | A-L2 | Bertsimas--Sim budgeted uncertainty supports the stated protection model. | literature | Original paper/publisher metadata and exact formulation locator. | verified |
-| A-L3 | Paper A's combined pricing/full-breakpoint/certification contribution is distinct from closest work. | qualified novelty | Reproducible search log and primary-source comparison table; qualified language. | verified |
+| A-L3 | Paper A's combined pricing/full-breakpoint/certification contribution is distinct from closest work. | qualified novelty | `CLOSEST_WORK_SEARCH_LOG.md`; `CLOSEST_WORK_COMPARISON.md`; qualified manuscript language. | verified |
 | A-B1 | Paper B begins from A's threshold family but contributes simultaneous family bounds absent from A. | scope/lineage | Side-by-side theorem and algorithm map; final cross-citation. | verified |

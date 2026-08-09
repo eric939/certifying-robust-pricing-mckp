@@ -242,7 +242,7 @@ def solve_segment_local_exact(
         solved += 1 if result.status == "optimal" else 0
         if result.selected_options is not None:
             cert = robust_certificate_segment_local(instance, result.selected_options, segments, segment_gammas)
-            if cert >= -tol and result.objective_value > best_obj + tol:
+            if cert >= 0.0 and result.objective_value > best_obj + tol:
                 best_selection = list(map(int, result.selected_options))
                 best_obj = float(result.objective_value)
                 best_theta = theta_vector

@@ -30,7 +30,7 @@ if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
 from robust_mckp import GlobalThetaBNBConfig, Option, PricingInstance, solve  # noqa: E402
-from robust_mckp.certificate import compute_certificate  # noqa: E402
+from robust_mckp.certificate import certificate_is_feasible, compute_certificate  # noqa: E402
 from robust_mckp.exact_bnb import (  # noqa: E402
     brute_force_global_robust,
     build_fixed_theta_data,
@@ -244,7 +244,7 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
                 loss = float(diag.get("selected_theta_lp_minus_round_down", float("inf")))
                 delta = float(diag.get("selected_theta_delta_v_max", float("-inf")))
                 direct = compute_certificate(instance, hullround.selections)
-                if direct < -1e-8 or loss > delta + 2e-7 * max(1.0, abs(delta), abs(loss)):
+                if not certificate_is_feasible(instance, hullround.selections) or loss > delta + 2e-7 * max(1.0, abs(delta), abs(loss)):
                     fail(
                         "hullround_certificate",
                         case,

@@ -8,7 +8,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 
-from .certificate import compute_certificate
+from .certificate import certificate_is_feasible, compute_certificate
 from .greedy import greedy_lp
 from .hull import Hull, build_upper_hull
 from .model import PricingInstance, Solution
@@ -492,7 +492,7 @@ def solve(instance: PricingInstance, *, upgrade_completion: bool = True) -> Solu
         selections = [int(hulls[i].option_indices[idx]) for i, idx in enumerate(discrete.vertices)]
 
         cert = compute_certificate(instance, selections)
-        if cert < -EPS:
+        if not certificate_is_feasible(instance, selections):
             theta_cert_infeasible += 1
             continue
 
@@ -577,7 +577,7 @@ def _solve_naive_reference(instance: PricingInstance, *, upgrade_completion: boo
 
         selections = [int(hulls[i].option_indices[idx]) for i, idx in enumerate(discrete.vertices)]
         cert = compute_certificate(instance, selections)
-        if cert < -EPS:
+        if not certificate_is_feasible(instance, selections):
             continue
 
         objective = float(sum(v_list[i][sel] for i, sel in enumerate(selections)))

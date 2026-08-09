@@ -8,7 +8,7 @@ from typing import Dict, Iterator, List, Optional, Sequence, Tuple
 
 import numpy as np
 
-from .certificate import compute_certificate
+from .certificate import certificate_is_feasible, compute_certificate
 from .exact_bnb import (
     CachedHullSegment,
     FixedThetaBNBConfig,
@@ -494,7 +494,7 @@ def solve_global_theta_bnb_sweep(
     if cfg.use_hullround_incumbent:
         try:
             hr = solve_hullround(instance, upgrade_completion=True)
-            if hr.is_feasible and hr.selections and compute_certificate(instance, hr.selections) >= -tol:
+            if hr.is_feasible and hr.selections and certificate_is_feasible(instance, hr.selections):
                 incumbent_selection = list(map(int, hr.selections))
                 incumbent_value = float(hr.objective)
                 incumbent_theta = float(hr.theta)
@@ -598,7 +598,7 @@ def solve_global_theta_bnb_sweep(
             incumbent_cert_ok = False
             if incumbent_selection is not None:
                 cert_start = time.perf_counter()
-                incumbent_cert_ok = compute_certificate(instance, incumbent_selection) >= -tol
+                incumbent_cert_ok = certificate_is_feasible(instance, incumbent_selection)
                 cert_time = time.perf_counter() - cert_start
                 cert_count = 1
             pruned_diag = {"sweep": state.record.__dict__} if cfg.collect_diagnostics else {}
@@ -714,14 +714,14 @@ def solve_global_theta_bnb_sweep(
             cert = compute_certificate(instance, bnb.selected_options)
             cert_time += time.perf_counter() - cert_start
             cert_count += 1
-            if cert >= -tol:
+            if certificate_is_feasible(instance, bnb.selected_options):
                 incumbent_selection = list(map(int, bnb.selected_options))
                 incumbent_value = float(bnb.objective_value)
                 incumbent_theta = theta
                 robust_passed = True
         elif bnb.selected_options is not None:
             cert_start = time.perf_counter()
-            robust_passed = compute_certificate(instance, bnb.selected_options) >= -tol
+            robust_passed = certificate_is_feasible(instance, bnb.selected_options)
             cert_time += time.perf_counter() - cert_start
             cert_count += 1
 
@@ -831,7 +831,9 @@ def solve_global_theta_bnb_sweep(
             "certificate_validation_time_seconds": float(certificate_validation_time),
             "certificate_validation_count": int(certificate_validation_count),
             "robust_certificate_value": float(compute_certificate(instance, incumbent_selection)) if incumbent_selection is not None else float("-inf"),
-            "robust_certificate_passed": bool(incumbent_selection is not None and compute_certificate(instance, incumbent_selection) >= -tol),
+            "robust_certificate_passed": bool(
+                incumbent_selection is not None and certificate_is_feasible(instance, incumbent_selection)
+            ),
         }
     )
 

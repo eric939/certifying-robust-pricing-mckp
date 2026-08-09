@@ -1,5 +1,5 @@
 PYTHON ?= python3
-RELEASE_DIR ?= results/release/2026-08-09-paper-a-final
+RELEASE_DIR ?= results/release/2026-08-09-paper-a-final-r2
 
 .PHONY: install-dev test check verify paper arxiv-package clean-check publishable-smoke solver-smoke pathc-smoke clean
 

@@ -5,11 +5,12 @@ import math
 import numpy as np
 import pytest
 
-from robust_mckp import GlobalThetaBNBConfig, Option, PricingInstance, solve
+from robust_mckp import FixedThetaBNBConfig, GlobalThetaBNBConfig, Option, PricingInstance, solve
 from robust_mckp.exact_bnb import (
     brute_force_global_robust,
     build_full_theta_candidates,
     compute_fixed_theta_lp_upper_bound,
+    solve_fixed_theta_bnb,
     solve_global_theta_bnb,
 )
 
@@ -145,6 +146,44 @@ def test_fixed_theta_lp_upper_bound_is_valid_against_bruteforce() -> None:
     brute = brute_force_global_robust(instance)
     assert bound.lp_feasible
     assert bound.lp_upper_bound + 1e-8 >= brute.objective_value
+
+
+def test_fixed_theta_lp_bound_preserves_sub_tolerance_positive_segment() -> None:
+    instance = PricingInstance(
+        items=[
+            [
+                Option(value=0.0, margin=5e-11, uncertainty=0.0),
+                Option(value=1.0, margin=0.0, uncertainty=0.0),
+            ]
+        ],
+        gamma=0,
+    )
+    bound = compute_fixed_theta_lp_upper_bound(instance, 0.0)
+    exact = solve_fixed_theta_bnb(
+        instance,
+        0.0,
+        FixedThetaBNBConfig(use_greedy_incumbent=False),
+    )
+    assert bound.lp_feasible
+    assert bound.lp_upper_bound == pytest.approx(1.0, abs=0.0, rel=0.0)
+    assert exact.status == "optimal"
+    assert exact.objective_value == pytest.approx(1.0, abs=0.0, rel=0.0)
+    assert exact.selected_options == [1]
+
+
+def test_global_solver_rejects_negative_certificate_inside_solver_tolerance() -> None:
+    instance = PricingInstance(
+        items=[[Option(value=1.0, margin=-5e-10, uncertainty=0.0)]],
+        gamma=0,
+    )
+    exact = solve_global_theta_bnb(instance)
+    brute = brute_force_global_robust(instance)
+    hullround = solve(instance)
+    assert exact.status == "infeasible"
+    assert exact.selected_options is None
+    assert not exact.validation_flags["robust_certificate_feasible"]
+    assert brute.status == "infeasible"
+    assert not hullround.is_feasible
 
 
 def test_global_bnb_matches_bruteforce_random_small_instances() -> None:

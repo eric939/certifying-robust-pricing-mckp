@@ -22,7 +22,7 @@ for path in [ROOT, ROOT / "src", ROOT / "experiments_nested"]:
 
 from experiments_nested._common import build_prefix_instance, make_master_portfolio  # noqa: E402
 from robust_mckp import GlobalThetaBNBConfig, Option, PricingInstance, solve  # noqa: E402
-from robust_mckp.certificate import compute_certificate  # noqa: E402
+from robust_mckp.certificate import certificate_is_feasible, compute_certificate  # noqa: E402
 from robust_mckp.exact_bnb import solve_global_theta_bnb  # noqa: E402
 
 
@@ -341,7 +341,7 @@ def run_hullround(instance: PricingInstance) -> Dict[str, object]:
         "objective": float(sol.objective),
         "certificate": float(cert),
         "runtime_seconds": float(runtime),
-        "valid_certificate": bool(sol.is_feasible and cert >= -1e-8),
+        "valid_certificate": bool(sol.is_feasible and certificate_is_feasible(instance, sol.selections)),
     }
 
 

@@ -17,6 +17,7 @@ if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
 from robust_mckp import GlobalThetaBNBConfig, Option, PricingInstance, solve  # noqa: E402
+from robust_mckp.certificate import certificate_is_feasible  # noqa: E402
 from robust_mckp.exact_bnb import solve_global_theta_bnb  # noqa: E402
 from robust_mckp.milp_baselines import solve_theta_decomposition_milp_baseline  # noqa: E402
 from robust_mckp.parametric_sweep import ParametricThetaSweepConfig, solve_global_theta_bnb_sweep  # noqa: E402
@@ -160,7 +161,7 @@ def row_from_global(base: Dict[str, object], result) -> Dict[str, object]:
         {
             "status": result.status,
             "certified_optimal": result.status == "optimal",
-            "feasible_incumbent": result.selected_options is not None and result.robust_certificate >= -1e-8,
+            "feasible_incumbent": bool(result.validation_flags.get("robust_certificate_feasible", False)),
             "objective_value": result.objective_value,
             "upper_bound": result.upper_bound,
             "lower_bound": result.lower_bound,
@@ -192,7 +193,7 @@ def row_from_global(base: Dict[str, object], result) -> Dict[str, object]:
             "validation_mode": diag.get("validation_mode", "none"),
             "max_abs_validation_error": max_validation,
             "robust_certificate": result.robust_certificate,
-            "robust_certificate_passed": result.robust_certificate >= -1e-8,
+            "robust_certificate_passed": bool(result.validation_flags.get("robust_certificate_feasible", False)),
         }
     )
     return row
@@ -218,7 +219,7 @@ def run_hullround(instance: PricingInstance, base: Dict[str, object]) -> Dict[st
                 "theta_count_evaluated": instr.get("theta_evaluated_count", 0),
                 "hull_rebuilds_total": instr.get("total_hull_rebuilds", 0),
                 "robust_certificate": sol.certificate_value,
-                "robust_certificate_passed": sol.certificate_value >= -1e-8,
+                "robust_certificate_passed": bool(sol.is_feasible),
             }
         )
     except Exception as exc:
@@ -233,7 +234,10 @@ def run_optional_baseline(instance: PricingInstance, backend: str, base: Dict[st
         {
             "status": result.status,
             "certified_optimal": result.status == "optimal",
-            "feasible_incumbent": result.selected_options is not None and result.robust_certificate >= -1e-8,
+            "feasible_incumbent": bool(
+                result.selected_options is not None
+                and certificate_is_feasible(instance, result.selected_options)
+            ),
             "objective_value": result.objective_value,
             "upper_bound": result.objective_value if result.status == "optimal" else float("nan"),
             "lower_bound": result.objective_value if result.selected_options is not None else float("-inf"),
@@ -244,7 +248,10 @@ def run_optional_baseline(instance: PricingInstance, backend: str, base: Dict[st
             "theta_count_evaluated": result.theta_count_solved,
             "theta_count_pruned": result.theta_count_skipped,
             "robust_certificate": result.robust_certificate,
-            "robust_certificate_passed": result.robust_certificate >= -1e-8,
+            "robust_certificate_passed": bool(
+                result.selected_options is not None
+                and certificate_is_feasible(instance, result.selected_options)
+            ),
             "backend_available": result.available,
             "backend_message": result.message,
         }

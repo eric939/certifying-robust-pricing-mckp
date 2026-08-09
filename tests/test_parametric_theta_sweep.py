@@ -178,6 +178,24 @@ def test_sweep_limited_run_does_not_claim_false_optimality() -> None:
     assert result.diagnostics["validation_mode"] == "sampled"
 
 
+def test_sweep_rejects_negative_gamma_certificate_inside_solver_tolerance() -> None:
+    instance = PricingInstance(
+        items=[
+            [Option(value=1.0, margin=1.0, uncertainty=1.0)],
+            [Option(value=1.0, margin=-5e-10, uncertainty=0.0)],
+        ],
+        gamma=1,
+    )
+    result = solve_global_theta_bnb_sweep(
+        instance,
+        GlobalThetaBNBConfig(theta_order="increasing"),
+        ParametricThetaSweepConfig(validate_against_recompute=True),
+    )
+    assert result.status == "infeasible"
+    assert result.selected_options is None
+    assert not result.validation_flags["robust_certificate_feasible"]
+
+
 def test_exact_sweep_matches_bruteforce_tiny_grid() -> None:
     instance = PricingInstance(
         items=[

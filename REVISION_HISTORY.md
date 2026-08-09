@@ -1,5 +1,29 @@
 # Revision history and correction disclosure
 
+## 2026-08-09 — Independent final-audit corrections
+
+Three independent release audits examined mathematical correctness,
+publication positioning, and reproducibility. They found and corrected the
+following pre-submission issues:
+
+- Required strictly positive exposure, nominal demand, and realized demand so
+  the robust ratio constraint always has a positive denominator and is truly
+  equivalent to its surplus form.
+- Replaced tolerance-based incumbent acceptance with an exact rational sign
+  check of the direct sorted-Gamma certificate over the binary64 inputs. A
+  one-item certificate of `-5e-10` is now rejected even when the solver
+  tolerance is `1e-9`.
+- Removed tolerance-based deletion and snapping of positive hull segments in
+  LP bounds and rounding. A permanent regression preserves a segment of length
+  `5e-11` whose endpoint is the unique fixed-threshold optimum.
+- Quantified the relative-gap corollary over a sequence of instances with
+  constants independent of problem size, removed an unsupported MCKP priority
+  claim, and added the reproducible closest-work search and comparison record.
+
+Because the first three changes affect the model or implementation protocol,
+the earlier dated evidence release remains immutable and a new canonical
+`2026-08-09-paper-a-final-r2` release was generated from the corrected code.
+
 ## 2026-08-09 — Public repository identity finalized
 
 - Renamed the public repository and local project folder to

@@ -9,7 +9,7 @@ from typing import List, Optional, Sequence
 
 import numpy as np
 
-from .certificate import compute_certificate
+from .certificate import certificate_is_feasible, compute_certificate
 from .exact_bnb import build_fixed_theta_data, build_full_theta_candidates, cost_for_selection
 from .model import PricingInstance
 
@@ -188,7 +188,7 @@ def solve_theta_decomposition_milp_baseline(
         if selections is not None:
             cert = compute_certificate(instance, selections)
             robust_obj = _objective(instance, selections)
-            if cert >= -tol and robust_obj > best_obj + tol:
+            if certificate_is_feasible(instance, selections) and robust_obj > best_obj + tol:
                 best_selection = list(map(int, selections))
                 best_obj = float(robust_obj)
                 best_theta = float(theta)

@@ -1,7 +1,7 @@
 # Reproducibility
 
 The only evidence supporting the final Paper A manuscript is
-`results/release/2026-08-09-paper-a-final/`. Earlier local outputs and legacy
+`results/release/2026-08-09-paper-a-final-r2/`. Earlier local outputs and legacy
 experiment drivers are not part of the paper's evidence.
 
 ## Environment

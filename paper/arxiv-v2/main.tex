@@ -174,7 +174,7 @@ The LP relaxation analysis in \Cref{sec:structure} consolidates known MCKP prope
 The scope is deliberately fixed-threshold and decomposition-oriented.  This paper does not derive a simultaneous interval bound for the complete threshold family.  Separate subsequent work takes the family established here as its starting point and studies that different algorithmic question.
 
 \subsection{Problem Formulation}
-\noindent Mathematically we have the following discrete problem. For each class $i\in\{1,\dots,n\}$, we choose one price level $x_i \in \mathcal X_i=\{x_{i,1},\dots,x_{i,m}\}.$ We are given parameters for each class $i$: reference price $a_i>0$, weight exposure $\omega_i$, nominal demand $\hat{g}_i:\mathcal{X}_i\to \R_{\geq0}$ (monotone decreasing on the admissible range; e.g.\ piecewise-linear or iso-elastic), relative tolerance $\sigma_i$, and a margin target parameter $\Delta>0$.
+\noindent Mathematically we have the following discrete problem. For each class $i\in\{1,\dots,n\}$, we choose one price level $x_i \in \mathcal X_i=\{x_{i,1},\dots,x_{i,m}\}$. We are given parameters for each class $i$: reference price $a_i>0$, strictly positive exposure $\omega_i>0$, strictly positive nominal demand $\hat{g}_i:\mathcal{X}_i\to \R_{>0}$ (monotone decreasing on the admissible range; e.g.\ piecewise-linear or iso-elastic), relative tolerance $\sigma_i$, and a margin target parameter $\Delta>0$.
 We assume the demand functions $\hat{g}_i$ depend only on the own-price $x_i$ and not on other items' prices, which is appropriate when cross-product substitution is negligible (see \Cref{sec:conclusion} for extensions).
 
 \noindent \textbf{Define}:
@@ -287,7 +287,7 @@ We assume the realized demand lies within a symmetric interval around the nomina
 \begin{equation}
     \tilde{g}_i(x_i) \in [\hat{g}_i(x_i) - \delta_i(x_i), \hat{g}_i(x_i) + \delta_i(x_i)],
 \end{equation}
-where $\delta_i(x_i) \ge 0$ is a variability parameter (e.g., derived from the standard error of the demand estimation). We assume $\delta_i(x_i)\le \hat g_i(x_i)$ on $\mathcal X_i^{\mathrm{ad}}$, so demand remains nonnegative under uncertainty.
+where $\delta_i(x_i) \ge 0$ is a variability parameter (e.g., derived from the standard error of the demand estimation). We assume $\delta_i(x_i)<\hat g_i(x_i)$ on $\mathcal X_i^{\mathrm{ad}}$. Thus realized demand remains strictly positive under uncertainty and, because $\omega_i,a_i>0$, the realized ratio denominator $\widetilde D(\bm x)=\sum_i\omega_i a_i\widetilde g_i(x_i)$ is positive for every admissible price vector and every realization in the uncertainty set.
 
 To avoid overly conservative solutions—such as those arising from box uncertainty where every product realizes its worst-case simultaneously—we adopt the ``Budget of Uncertainty'' approach proposed by \citet{BertsimasSim2004}. We define an integer budget $\Gamma \in \{0,1,\dots,n\}$, representing the maximum number of products that can simultaneously deviate to their worst-case limits.
 
@@ -299,7 +299,7 @@ Let $\xi_i \in [-1, 1]$ be the scaled deviation for item $i$. For a fixed price 
 \end{definition}
 
 \subsection{The Robust Counterpart}
-The robust margin constraint requires $S(\bm{x}) \ge 0$ for all $\tilde{g} \in \mathcal{U}^\Gamma(\bm{x})$. Substituting the definitions of $N(\bm{x})$ and $D(\bm{x})$, this condition is equivalent to:
+The robust margin constraint requires $\widetilde N(\bm{x})/\widetilde D(\bm{x})\ge\Delta$ for all $\tilde{g} \in \mathcal{U}^\Gamma(\bm{x})$. The strict positivity of $\widetilde D$ established above makes this ratio condition equivalent to the following robust surplus inequality:
 \begin{equation}\label{eq:robust_raw}
     \min_{\tilde{g} \in \mathcal{U}^\Gamma(\bm{x})} \sum_{i=1}^n \omega_i \tilde{g}_i(x_i) (x_i - \Delta a_i) \ge 0.
 \end{equation}
@@ -796,16 +796,16 @@ as claimed.
 \end{proof}
 
 \begin{corollary}[Relative gap decays as \(O(1/n)\)]\label{cor:igap_relative_theta_clean}
-Assume there exist constants $\overline V<\infty$ and $c>0$ such that for all $\theta\in\mathcal B$,
+Consider a sequence of instances indexed by the number of items $n$, with threshold set $\mathcal B_n$. Assume there exist constants $\overline V<\infty$ and $c>0$, independent of $n$, such that for every instance in the sequence and every $\theta\in\mathcal B_n$,
 \[
 \Delta V_{\max}^\theta\le \overline V,
 \qquad
-\mathrm{OPT}_{\mathrm{LP}}(\theta)\ge c\,n.
+\mathrm{OPT}_{\mathrm{LP},n}(\theta)\ge c\,n.
 \]
-Then for all $\theta\in\mathcal B$,
+Then, uniformly over $\theta\in\mathcal B_n$,
 \[
 0\ \le\
-\frac{\mathrm{OPT}_{\mathrm{LP}}(\theta)-\mathrm{OPT}_{\mathrm{IP}}(\theta)}{\mathrm{OPT}_{\mathrm{LP}}(\theta)}
+\frac{\mathrm{OPT}_{\mathrm{LP},n}(\theta)-\mathrm{OPT}_{\mathrm{IP},n}(\theta)}{\mathrm{OPT}_{\mathrm{LP},n}(\theta)}
 \ \le\
 \frac{\overline V}{c\,n}
 \ =\ O\!\left(\frac{1}{n}\right).
@@ -813,9 +813,9 @@ Then for all $\theta\in\mathcal B$,
 \end{corollary}
 
 \begin{proof}
-By \Cref{prop:igap_additive_theta_clean},
-$\mathrm{OPT}_{\mathrm{LP}}(\theta)-\mathrm{OPT}_{\mathrm{IP}}(\theta)\le \Delta V_{\max}^\theta\le \overline V$.
-Divide by $\mathrm{OPT}_{\mathrm{LP}}(\theta)\ge c\,n>0$.
+For each $n$ and $\theta\in\mathcal B_n$, \Cref{prop:igap_additive_theta_clean} gives
+$\mathrm{OPT}_{\mathrm{LP},n}(\theta)-\mathrm{OPT}_{\mathrm{IP},n}(\theta)\le \Delta V_{\max}^\theta\le \overline V$.
+Divide by $\mathrm{OPT}_{\mathrm{LP},n}(\theta)\ge c\,n>0$. Because $\overline V$ and $c$ do not depend on $n$ or $\theta$, the bound is uniform over the threshold family.
 \end{proof}
 
 \paragraph{When do \texorpdfstring{$\overline V$}{Vbar} and $c$ exist? (Sufficient conditions)}
@@ -891,8 +891,11 @@ integer completion can improve it.
 \end{proof}
 
 Every incumbent produced by the floating-point implementation is checked by
-the original sorted-$\Gamma$ certificate in \eqref{eq:certify_alg}; solver
-tolerances are not substituted for robust feasibility.
+the original sorted-$\Gamma$ certificate in \eqref{eq:certify_alg}.  For the
+feasibility decision, the binary64 input coefficients are converted to their
+exact rational values and the certificate sign is tested without a feasibility
+tolerance; LP feasibility, bound comparison, and objective comparison retain
+their separately reported numerical tolerances.
 
 \subsection{Global exactness and anytime gap}\label{subsec:global_exact}
 
@@ -1234,7 +1237,7 @@ Given items $i=1,\dots,n$ with value $v_i\ge 0$ and cost $c_i\ge 0$, and a capac
 \end{align}
 
 \paragraph{Multiple-Choice Knapsack (MCKP).}
-This problem was first introduced by \citet{Nauss1978} as a generalization of the classical knapsack problem. Items are partitioned into $n$ groups; from each group exactly one option must be chosen.
+Early formulations and algorithms include \citet{Nauss1978}, \citet{Ibaraki1978}, and \citet{Sinha1979}. Items are partitioned into $n$ groups; from each group exactly one option must be chosen.
 Let group $i$ have discrete options (price levels) indexed by $j$, with value $v_{ij}$ and cost $c_{ij}$. With capacity $C$, the MCKP is
 \begin{align}
     \max \quad & \sum_{i=1}^n \sum_j v_{ij}\,z_{ij} \label{eq:mckp_obj}\\

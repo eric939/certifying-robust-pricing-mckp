@@ -28,11 +28,13 @@ evidence, and a separate arXiv record. See [PAPER_LINEAGE.md](PAPER_LINEAGE.md).
 ## Definitive files
 
 - `paper/current/`: final Paper A source (`arxiv-v2`).
-- `results/release/2026-08-09-paper-a-final/`: canonical evidence release.
+- `results/release/2026-08-09-paper-a-final-r2/`: canonical evidence release.
 - `src/robust_mckp/`: solver implementation.
 - `tests/`: regression and correctness tests.
 - `research/CLAIM_EVIDENCE_MATRIX.md`: claim-to-proof/evidence map.
 - `research/EVIDENCE_LEDGER_A.csv`: primary-source reference ledger.
+- `research/CLOSEST_WORK_SEARCH_LOG.md`: dated, reproducible positioning search.
+- `research/CLOSEST_WORK_COMPARISON.md`: primary-source feature comparison.
 - `REVISION_HISTORY.md`: correction disclosure and frozen scope.
 
 Historical arXiv-v1 material is immutable under

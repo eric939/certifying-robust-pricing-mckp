@@ -22,7 +22,7 @@ for path in [ROOT, ROOT / "src", ROOT / "experiments_nested"]:
 
 from experiments_nested._common import build_prefix_instance, make_master_portfolio  # noqa: E402
 from robust_mckp import PricingInstance  # noqa: E402
-from robust_mckp.certificate import compute_certificate  # noqa: E402
+from robust_mckp.certificate import certificate_is_feasible, compute_certificate  # noqa: E402
 
 from scripts.run_publishable_experiments import (  # noqa: E402
     CSV_DIR,
@@ -148,7 +148,9 @@ def solve_full_robust_scip(
 
     return {
         "status": status,
-        "certified": status == "OPTIMAL" and selections is not None and cert >= -1e-7,
+        "certified": status == "OPTIMAL"
+        and selections is not None
+        and certificate_is_feasible(instance, selections),
         "objective": obj,
         "best_bound": bound,
         "mip_gap": gap,
@@ -212,7 +214,9 @@ def solve_fixed_theta_scip(
         bound = float("nan")
     return {
         "status": status,
-        "certified": status == "OPTIMAL" and selections is not None and cert >= -1e-7,
+        "certified": status == "OPTIMAL"
+        and selections is not None
+        and certificate_is_feasible(instance, selections),
         "objective": obj,
         "best_bound": bound,
         "mip_gap": gap,
@@ -263,7 +267,7 @@ def solve_theta_enum_scip(
     cert = compute_certificate(instance, best_sel) if best_sel is not None else float("nan")
     return {
         "status": "OPTIMAL" if best_sel is not None else "NO_FEASIBLE_THETA",
-        "certified": best_sel is not None and cert >= -1e-7,
+        "certified": best_sel is not None and certificate_is_feasible(instance, best_sel),
         "objective": float(best_obj),
         "runtime_s": time.perf_counter() - t0,
         "theta_count": int(candidates.size),
