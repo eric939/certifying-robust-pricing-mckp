@@ -19,9 +19,9 @@ Status values: `pending`, `verified`, `revised`, `removed`, `blocked`.
 | A-I1 | Implementation preserves every binary64-distinct original deviation plus zero. | implementation | Unit and unique-feasible close-threshold regression tests. | verified |
 | A-I2 | Every returned robust incumbent is checked by direct sorted-Gamma evaluation. | implementation | Source trace plus tests with rejected near-infeasible candidates. | verified |
 | A-I3 | Hulls are LP-bound objects and exact search retains non-dominated below-hull options. | implementation | Source trace plus targeted integer-optimum test. | verified |
-| A-E1 | HullRound certificate holds throughout the registered experiment grid. | observation | Canonical raw rows and zero certificate failures. | pending |
+| A-E1 | HullRound certificate holds throughout the registered experiment grid. | observation | Canonical raw rows and zero certificate failures. | verified |
 | A-E2 | Sweep and enumeration agree on registered validation rows. | observation | Canonical parity fields and zero unexplained mismatches. | verified |
-| A-E3 | Exact mode agrees with brute force/open solvers on matched completed rows. | observation | Canonical matched results and availability disclosure. | pending |
+| A-E3 | Exact mode agrees with brute force/open solvers on matched completed rows. | observation | Canonical matched results and availability disclosure. | verified |
 | A-E4 | Sweep reduces fixed-threshold construction work on tested families. | observation | Prespecified construction metrics; no solver-dominance wording. | removed |
 | A-E5 | Controlled pricing instances display a revenue--protection tradeoff. | observation | Dated semi-synthetic protocol/raw results; no causal or field claim. | removed |
 | A-L1 | MCKP LP geometry and exact methods are classical. | literature | Primary original papers/publisher metadata with locators. | verified |

@@ -18,7 +18,7 @@ will receive a new arXiv identifier.
 - HullRound and the one-item additive rounding certificate;
 - exact full-breakpoint integer search and valid global-gap accounting;
 - the guarded parametric threshold sweep; and
-- pricing-oriented computational and application evidence.
+- pricing-oriented controlled computational evidence.
 
 ## Paper B owns
 
