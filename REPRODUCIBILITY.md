@@ -19,8 +19,8 @@ The verification target checks:
 1. all 122 tests;
 2. the frozen baseline release and its scientific gates;
 3. both nested v3 manifests and every released byte;
-4. all 135 controlled full-family certificates after deterministic instance
-   reconstruction;
+4. all 135 controlled full-family certificates against frozen exact binary64
+   instance snapshots, without platform-dependent generator reconstruction;
 5. all three pilot certificates after reconstruction from the public derived
    model record; and
 6. the absence of tracked manuscript, build, and restricted-data artifacts.
@@ -65,11 +65,20 @@ to a new local directory:
 .venv/bin/python scripts/run_v3_global_certificate_study.py \
   --release-dir results/release/2026-08-09-paper-a-final-r2 \
   --output-dir results/local/v3-global-certificate-study
+
+.venv/bin/python scripts/freeze_v3_controlled_instances.py \
+  --study-csv results/local/v3-global-certificate-study/global_certificate_study.csv \
+  --output-dir results/local/v3-global-certificate-study/instances
 ```
 
 Each of the 45 reconstructed instances has one shared sharp full-family LP
 upper endpoint and three feasible lower-endpoint tracks. The resulting 135 JSON
 files are checked in exact rational arithmetic.
+
+The release additionally stores every controlled input coefficient as a Python
+binary64 hexadecimal string. These snapshots are authoritative for portable
+certificate verification because transcendental generator calculations can
+differ by a final bit across numerical platforms.
 
 ## Rebuild the exploratory Dominick's pilot
 

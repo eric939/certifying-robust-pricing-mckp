@@ -36,7 +36,7 @@ from .global_certificate import (
     verify_global_certificate,
 )
 
-__version__ = "3.0.0"
+__version__ = "3.0.1"
 
 __all__ = [
     "__version__",

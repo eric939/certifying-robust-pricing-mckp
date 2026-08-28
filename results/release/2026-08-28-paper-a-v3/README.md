@@ -17,6 +17,11 @@ The reported relative width is `(U-H)/U` only when `U > 0`. Every stored
 multiplier passes exact left/right subgradient optimality, so `U` is the sharp
 full-family LP endpoint for the encoded dyadic-rational instance.
 
+`global-certificate-study/instances/` stores all 45 controlled inputs with
+every binary64 coefficient encoded by `float.hex()`. These exact snapshots make
+verification portable: the original transcendental generator calculations can
+differ by one final bit across numerical platforms.
+
 ## Dominick's pilot
 
 `dominicks-pilot/dominicks_cereal_pilot.json` contains the complete derived
@@ -36,13 +41,12 @@ instance rather than to week-specific candidate-price forecasts.
 
 ## Source snapshot
 
-`source-snapshot/` contains the v3-specific source files layered on top of the
-base code repository commit recorded in the controlled-study protocol. This
-snapshot is included because the v3 study was run from an intentionally
-uncommitted development tree. It does not replace the remaining files in the
-base repository.
+`source-snapshot/` records the v3-specific source state that generated the
+original evidence, layered on top of the base commit recorded in the
+controlled-study protocol. It preserves that provenance and does not replace
+the current public repository source.
 
-The manuscript sources and compiled PDFs live one directory above this
-bundle. The top-level `MANIFEST.sha256` binds the controlled archive, pilot
-outputs, and dirty-tree source snapshot. No public Git tag has been created
-automatically.
+The manuscript is maintained separately and is not included here. The
+top-level `MANIFEST.sha256` binds the controlled archive, exact input snapshots,
+pilot outputs, and evidence-generating source snapshot. This reproducibility
+bundle is published with repository tag `v3.0.1`.

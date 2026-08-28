@@ -6,7 +6,7 @@ v3 revision of
 [arXiv:2603.18653](https://arxiv.org/abs/2603.18653),
 *A Certifying MCKP Framework for Gamma-Robust Discrete Pricing*.
 The paper-aligned code and evidence tag is
-[`v3.0.0`](https://github.com/eric939/certifying-robust-pricing-mckp/tree/v3.0.0).
+[`v3.0.1`](https://github.com/eric939/certifying-robust-pricing-mckp/tree/v3.0.1).
 
 The manuscript, submission packages, publication notes, and historical paper
 sources are intentionally not part of this software repository.
@@ -25,7 +25,7 @@ sources are intentionally not part of this software repository.
 - `results/release/2026-08-28-paper-a-v3/`: the canonical v3 evidence release:
   135 exact certificate intervals for 45 controlled instances, three exact
   pilot certificates, derived pilot records, protocols, provenance, source
-  snapshot, and nested SHA-256 manifests.
+  snapshot, exact binary64 input snapshots, and nested SHA-256 manifests.
 - `results/release/2026-08-09-paper-a-final-r2/`: the frozen baseline release
   from which the v3 controlled instances were reconstructed.
 

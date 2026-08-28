@@ -12,13 +12,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-for path in (ROOT, ROOT / "src", ROOT / "experiments_nested"):
-    if str(path) not in sys.path:
-        sys.path.insert(0, str(path))
-
-from experiments_nested._common import build_prefix_instance, make_master_portfolio  # noqa: E402
-from robust_mckp import Option, PricingInstance  # noqa: E402
-from robust_mckp.global_certificate import verify_global_certificate  # noqa: E402
+sys.path.insert(0, str(ROOT / "src"))
+from robust_mckp import Option, PricingInstance
+from robust_mckp.global_certificate import instance_sha256, verify_global_certificate
 
 
 DEFAULT_RELEASE = ROOT / "results" / "release" / "2026-08-28-paper-a-v3"
@@ -77,20 +73,32 @@ def verify_manifest(root: Path) -> int:
     return len(manifest)
 
 
-def controlled_instance(seed: int, n: int, m: int, gamma: int) -> PricingInstance:
-    master = make_master_portfolio(
-        seed=seed,
-        n_max=n,
-        m_max=m,
-        min_admissible_menu=min(8, m),
+def load_instance(path: Path) -> PricingInstance:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    require(payload["schema_version"] == 1, f"unsupported instance schema: {path}")
+    require(
+        payload["coefficient_encoding"] == "python_float_hex_binary64",
+        f"unsupported coefficient encoding: {path}",
     )
-    return build_prefix_instance(
-        master,
-        n=n,
-        m=m,
-        alpha=0.10,
-        gamma=gamma,
-    ).instance
+    groups = []
+    for raw_group in payload["items"]:
+        group = []
+        for raw in raw_group:
+            raw_price = raw["price"]
+            group.append(
+                Option(
+                    value=float.fromhex(raw["value"]),
+                    margin=float.fromhex(raw["margin"]),
+                    uncertainty=float.fromhex(raw["uncertainty"]),
+                    price=(None if raw_price is None else float.fromhex(raw_price)),
+                )
+            )
+        groups.append(group)
+    return PricingInstance(
+        items=groups,
+        gamma=int(payload["gamma"]),
+        name=str(payload.get("name") or ""),
+    )
 
 
 def verify_controlled_study(release: Path) -> int:
@@ -106,11 +114,31 @@ def verify_controlled_study(release: Path) -> int:
     require(int(summary["certificates_built"]) == 135, "controlled certificate count mismatch")
     require(int(summary["certificates_verified"]) == 135, "a controlled certificate was not verified")
 
+    instance_dir = study / "instances"
+    index = json.loads((instance_dir / "index.json").read_text(encoding="utf-8"))
+    require(index["schema_version"] == 1, "unsupported controlled-instance index")
+    require(
+        index["source_study_csv_sha256"]
+        == sha256(study / "global_certificate_study.csv"),
+        "controlled-instance index is bound to a different study table",
+    )
+    require(len(index["instances"]) == 45, "controlled-instance index count mismatch")
+    indexed = {record["file"]: record for record in index["instances"]}
+    require(len(indexed) == 45, "duplicate controlled-instance index entry")
+
     checked = 0
     for row in rows:
-        instance = controlled_instance(
-            int(row["seed"]), int(row["n"]), int(row["m"]), int(row["gamma"])
+        filename = (
+            f"seed-{row['seed']}_n-{row['n']}_m-{row['m']}_gamma-{row['gamma']}.json"
         )
+        require(filename in indexed, f"missing controlled instance index: {filename}")
+        instance_path = instance_dir / filename
+        record = indexed[filename]
+        require(sha256(instance_path) == record["file_sha256"], f"instance file hash mismatch: {filename}")
+        instance = load_instance(instance_path)
+        observed_instance_hash = instance_sha256(instance)
+        require(observed_instance_hash == record["instance_sha256"], f"instance index hash mismatch: {filename}")
+        require(observed_instance_hash == row["instance_sha256"], f"study instance hash mismatch: {filename}")
         for label in ("formal", "completed", "exact_bnb"):
             relative = row[f"{label}_certificate_file"]
             raw = (study / relative).read_text(encoding="utf-8")
