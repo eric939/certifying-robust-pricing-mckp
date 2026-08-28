@@ -13,3 +13,20 @@ results/clean_repro_check/
 *.aux
 *.out
 *.toc
+
+# Manuscript and submission artifacts live in the separate publication workspace.
+papers/
+manuscript/
+submission_packages/
+build/
+*.tex
+*.pdf
+*.docx
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Provider-controlled Dominick's inputs are never redistributed.
+data/raw/
+wcer.zip
+upccer.csv

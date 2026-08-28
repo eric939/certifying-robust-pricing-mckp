@@ -1,0 +1,33 @@
+{
+  "bnb_status_interpretation": "reported optimal status closes floating LP bounds within tolerance; it is not an exact-rational integer-optimality proof",
+  "bnb_tolerance": 1e-09,
+  "checker_policy": "recompute transformed data, multiplier optimality, and every U_theta from original instance coefficients",
+  "coefficient_interpretation": "Fraction.from_float(binary64)",
+  "git_commit": "73e8ca28e1c1c237cafea26cff7c24fe25489b02",
+  "git_status_porcelain": "M src/robust_mckp/__init__.py\n?? scripts/plot_v3_dominicks_diagnostics.py\n?? scripts/run_v3_dominicks_pilot.py\n?? scripts/run_v3_global_certificate_study.py\n?? src/robust_mckp/global_certificate.py\n?? tests/test_global_certificate.py",
+  "incumbent_tracks": [
+    "best literal lower-endpoint round-down over the full threshold family",
+    "best rounding/repair path plus feasibility-preserving completion over the full threshold family",
+    "tolerance-controlled tailored B&B incumbent"
+  ],
+  "input_exact_comparisons_sha256": "310a59fdca7de9e8fa5b73da5aa2b38333934d57a8ddb8ab9dfd0b04efb1663b",
+  "input_release_logical_name": "2026-08-09-paper-a-final-r2",
+  "input_table": "inputs/exact_comparisons.csv",
+  "multiplier_policy": "exact minimizer of each fixed-threshold one-dimensional LP dual",
+  "multiplier_verification": "exact left/right subgradient optimality at every feasible threshold",
+  "platform": "macOS-27.0-arm64-arm-64bit",
+  "python": "3.12.12 (main, Dec 17 2025, 21:07:08) [Clang 21.1.4 ]",
+  "schema_version": 1,
+  "source_file_sha256": {
+    "experiments_nested/_common.py": "f78a2bdda27c14fbc8db2d60d7a74ddcbae2ad40d960d55065ccb670878a3282",
+    "scripts/run_v3_global_certificate_study.py": "1daebc502fe9ed8c2b3023e36dc1b7cf71cc956dfbc95c49dd50d92c87a9c4af",
+    "src/robust_mckp/certificate.py": "e1a24bea026f8ad29b6539a40e001422033be770563868c2e1016f0428d8ec15",
+    "src/robust_mckp/exact_bnb.py": "9a238a528346720ee5da0061627b60b3888e1bdfba50e40c48fbdde10d60ba9a",
+    "src/robust_mckp/global_certificate.py": "f8a7ba0953e3b840295f3d99a31a19e59a5941d65ed95add5e8c37f97611652e",
+    "src/robust_mckp/greedy.py": "33fe668f2df735c41bc4fc30b62e1d38b3c093ce9d98c9f1088b6146816474f7",
+    "src/robust_mckp/hull.py": "bd56eb246e9f07e7de00bcabfc12f5eaae2eaf7e103982d997356bab18c37c1b",
+    "src/robust_mckp/rounding.py": "10e3ee0f27c151f1b4e6cbf97395160a76f8faefb9bbf7c7e19ccd1593b25ba2",
+    "src/robust_mckp/solver.py": "3e8ae23bf182a1435b4042f767e039af700e117d8fdd2bb7db0b39d8de578042"
+  },
+  "theta_policy": "zero plus every original binary64-distinct absolute deviation"
+}

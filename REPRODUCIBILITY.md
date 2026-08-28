@@ -14,9 +14,19 @@ uv sync --extra experiments --extra validation --extra dev
 make verify PYTHON=.venv/bin/python
 ```
 
-The verifier checks the SHA-256 manifest, the independent mathematical audit,
-all exact-solver comparisons, every robust-feasibility certificate, and every
-one-item rounding bound. It does not require manuscript source or a TeX system.
+The verification target checks:
+
+1. all 122 tests;
+2. the frozen baseline release and its scientific gates;
+3. both nested v3 manifests and every released byte;
+4. all 135 controlled full-family certificates after deterministic instance
+   reconstruction;
+5. all three pilot certificates after reconstruction from the public derived
+   model record; and
+6. the absence of tracked manuscript, build, and restricted-data artifacts.
+
+It does not require manuscript source, a TeX system, or the Dominick's raw
+files.
 
 ## Fresh bounded reproduction
 
@@ -45,3 +55,36 @@ The audit validates the global robust optimum against independent oracles,
 fixed-threshold LP bounds, the full binary64-distinct threshold family,
 parametric-sweep reconstruction, and HullRound's robust certificate. Timing
 observations are evidence, never proofs.
+
+## Rebuild the v3 controlled certificate study
+
+The v3 study reads the immutable baseline comparison table and always writes
+to a new local directory:
+
+```bash
+.venv/bin/python scripts/run_v3_global_certificate_study.py \
+  --release-dir results/release/2026-08-09-paper-a-final-r2 \
+  --output-dir results/local/v3-global-certificate-study
+```
+
+Each of the 45 reconstructed instances has one shared sharp full-family LP
+upper endpoint and three feasible lower-endpoint tracks. The resulting 135 JSON
+files are checked in exact rational arithmetic.
+
+## Rebuild the exploratory Dominick's pilot
+
+Obtain `wcer.zip` and `upccer.csv` directly from the Kilts Center under its
+terms, then run:
+
+```bash
+.venv/bin/python scripts/run_v3_dominicks_pilot.py \
+  --movement-zip data/raw/dominicks/wcer.zip \
+  --upc-csv data/raw/dominicks/upccer.csv \
+  --output results/local/dominicks_cereal_pilot.json
+```
+
+Raw provider files and extracted transaction rows are ignored and must not be
+committed. The UPC file is downloaded and hashed for provenance only; the
+pilot computation does not read it. The released pilot status is
+`failed_availability_and_unmodeled_dependence_gate`; that negative result is a
+required reproducibility check, not a passing deployment claim.
