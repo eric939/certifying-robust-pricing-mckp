@@ -1333,7 +1333,8 @@ def write_certificate_figure(
         axes[1].plot(
             n_values,
             [max(value, 1e-8) for value in medians],
-            marker="o",
+            marker="D" if regime == "adversarial" else "o",
+            linestyle="none" if regime == "adversarial" else "-",
             linewidth=1.4,
             markersize=4.0,
             color=colors[regime],

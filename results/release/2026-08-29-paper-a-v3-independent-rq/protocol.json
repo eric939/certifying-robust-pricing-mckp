@@ -290,7 +290,7 @@
   ],
   "source_commit_at_run": "6ce61beed969b5dc0ead9b759cd83863fb671ac8",
   "source_sha256": {
-    "scripts/run_v3_independent_rq_campaign.py": "2b326784852c26c442d3b9e4cd2b3a1514bf8afcdb1f012e9a63f5bf048a5549",
+    "scripts/run_v3_independent_rq_campaign.py": "2c0385468de0110b95760de3e32642045fa15839020ff9d52f2e9f21573db99c",
     "scripts/verify_v3_independent_rq_release.py": "eab394a751e33fa8772c56d92630733013767736062ea1a4dd615535844171ec",
     "src/robust_mckp/global_certificate.py": "0cf6488765e0853af22b30e8be42305003c0f05dcdde193bb0aa6e3d79bbe335",
     "src/robust_mckp/preprocessing.py": "c3ffe2055ee02397982c316773306a14004bb3a25f68b627df350a94842286ac",

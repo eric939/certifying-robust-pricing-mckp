@@ -8,7 +8,7 @@ v3 revision of the working paper currently available as
 Finite-Menu Pricing*. The live arXiv record retains the v2 title until the
 manuscript update is posted.
 The paper-aligned code and evidence tag is
-[`v3.1.0`](https://github.com/eric939/certifying-robust-pricing-mckp/tree/v3.1.0).
+[`v3.1.1`](https://github.com/eric939/certifying-robust-pricing-mckp/tree/v3.1.1).
 
 The manuscript, submission packages, publication notes, and historical paper
 sources are intentionally not part of this software repository.

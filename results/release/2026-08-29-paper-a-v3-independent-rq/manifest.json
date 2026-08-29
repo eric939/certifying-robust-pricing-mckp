@@ -143,9 +143,9 @@
       "sha256": "9fa1dc13526bedc29f8dc8c5c8d5a86ee368d589bd50795507deb06a84c0787c"
     },
     {
-      "bytes": 114592,
+      "bytes": 95187,
       "path": "figures/certificate-and-scaling.png",
-      "sha256": "b145ade0636b8ee0c133de23efae300a4c303fecab18b2987f08df158d828502"
+      "sha256": "ae74ccfbbd80f6a3a89842dc44f85f3a45986839819aff215572126b0b04cb21"
     },
     {
       "bytes": 135609,
@@ -370,7 +370,7 @@
     {
       "bytes": 4982,
       "path": "protocol.json",
-      "sha256": "bd7a6936e864bad3971d071b932e9c39f2f8828fb19beaaf75b0ec02b84b9860"
+      "sha256": "8eeeb5a2b561c3659d3f20e53eeab58112153b079185dd910a60b3fa4bb853f8"
     },
     {
       "bytes": 5130,
