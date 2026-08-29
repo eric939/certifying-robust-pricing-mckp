@@ -82,6 +82,7 @@ class Portfolio:
     def to_instance(self, gamma: int) -> PricingInstance:
         return from_pricing_data(
             reference_prices=self.reference_prices,
+            unit_costs=self.reference_prices,
             weights=self.weights,
             price_menus=self.price_menus,
             demands=self.demands,

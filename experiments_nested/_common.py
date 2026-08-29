@@ -162,6 +162,11 @@ def build_prefix_instance(
 
     instance = from_pricing_data(
         reference_prices=a,
+        # Historical nested-prefix releases used the admissibility anchor as
+        # the economic-cost coefficient.  Keep that explicit specialization
+        # here so old evidence remains reproducible; new v3 campaigns use
+        # independently generated unit costs.
+        unit_costs=a,
         weights=w,
         price_menus=price_menus,
         demands=demands,

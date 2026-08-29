@@ -1,8 +1,9 @@
 """Preprocessing and instance construction utilities."""
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass
-from typing import Iterable, List, Sequence
+from typing import Iterable, List, Optional, Sequence
 
 import numpy as np
 
@@ -26,40 +27,74 @@ def from_pricing_data(
     margin_target: float,
     tolerances: Sequence[float],
     gamma: int,
+    unit_costs: Optional[Sequence[float]] = None,
 ) -> PricingInstance:
     """Construct a PricingInstance from raw pricing inputs.
 
     The per-option values are computed as:
         v[i,j] = ω_i * x_{i,j} * ĝ_i(x_{i,j})
-        s[i,j] = ω_i * (x_{i,j} - Δ a_i) * ĝ_i(x_{i,j})
-        t[i,j] = ω_i * (x_{i,j} - Δ a_i) * δ_i(x_{i,j})
+        s[i,j] = ω_i * (x_{i,j} - κ q_i) * ĝ_i(x_{i,j})
+        t[i,j] = ω_i * |x_{i,j} - κ q_i| * d_adv[i,j]
 
     Admissible options are filtered by the interval
-    [(1-σ_i) a_i, (1+σ_i) a_i].
+    [(1-σ_i) r_i, (1+σ_i) r_i].  Thus ``reference_prices`` control
+    admissibility only, while ``unit_costs`` control the economic ratio.
+
+    For releases made before the reference-price/unit-cost distinction was
+    explicit, omitting ``unit_costs`` invokes the legacy specialization
+    ``q_i = r_i`` and emits a :class:`DeprecationWarning`.  That path preserves
+    the historical option coefficients (including their signed uncertainty
+    field); all robust solvers use its absolute magnitude.  New code should
+    always supply ``unit_costs``.
 
     Args:
-        reference_prices: a_i array, shape (n,).
+        reference_prices: Admissibility anchors r_i, shape (n,).
         weights: ω_i array, shape (n,).
         price_menus: list of price arrays, per item.
         demands: list of nominal demand arrays, per item.
-        uncertainties: list of uncertainty arrays, per item.
-        margin_target: Δ scalar.
+        uncertainties: Adverse demand-width arrays d_adv, per item.
+        margin_target: Revenue-to-cost target κ.
         tolerances: σ_i array, shape (n,).
         gamma: budget Γ.
+        unit_costs: Economic unit costs or expected claims q_i, shape (n,).
+            Omit only to reproduce the documented legacy case q_i = r_i.
 
     Returns:
         PricingInstance with filtered options.
     """
 
-    a = _as_array_1d(reference_prices, "reference_prices")
+    r = _as_array_1d(reference_prices, "reference_prices")
     w = _as_array_1d(weights, "weights")
     sigma = _as_array_1d(tolerances, "tolerances")
+    legacy_reference_as_cost = unit_costs is None
+    if legacy_reference_as_cost:
+        warnings.warn(
+            "Omitting unit_costs invokes the legacy q_i = r_i specialization; "
+            "pass unit_costs explicitly for the Paper-A v3 model.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        q = r.copy()
+    else:
+        q = _as_array_1d(unit_costs, "unit_costs")
 
-    n = a.size
-    if w.size != n or sigma.size != n:
-        raise ValueError("reference_prices, weights, tolerances must have same length")
+    n = r.size
+    if w.size != n or sigma.size != n or q.size != n:
+        raise ValueError(
+            "reference_prices, unit_costs, weights, and tolerances must have same length"
+        )
     if len(price_menus) != n or len(demands) != n or len(uncertainties) != n:
         raise ValueError("price_menus, demands, uncertainties must have length n")
+    if not np.all(np.isfinite(r)) or np.any(r <= 0.0):
+        raise ValueError("reference_prices must be finite and strictly positive")
+    if not np.all(np.isfinite(q)) or np.any(q <= 0.0):
+        raise ValueError("unit_costs must be finite and strictly positive")
+    if not np.all(np.isfinite(w)) or np.any(w <= 0.0):
+        raise ValueError("weights must be finite and strictly positive")
+    if not np.all(np.isfinite(sigma)) or np.any(sigma < 0.0):
+        raise ValueError("tolerances must be finite and nonnegative")
+    if not np.isfinite(float(margin_target)) or float(margin_target) <= 0.0:
+        raise ValueError("margin_target must be finite and strictly positive")
 
     items: List[List[Option]] = []
 
@@ -72,8 +107,8 @@ def from_pricing_data(
         if x.ndim != 1:
             raise ValueError(f"price menu for item {i} must be 1D")
 
-        lower = (1.0 - sigma[i]) * a[i]
-        upper = (1.0 + sigma[i]) * a[i]
+        lower = (1.0 - sigma[i]) * r[i]
+        upper = (1.0 + sigma[i]) * r[i]
         mask = (x >= lower - EPS) & (x <= upper + EPS)
         if not np.any(mask):
             raise ValueError(f"no admissible options for item {i}")
@@ -83,8 +118,12 @@ def from_pricing_data(
         d_f = delta[mask]
 
         v = w[i] * x_f * g_f
-        margin = w[i] * (x_f - margin_target * a[i]) * g_f
-        uncertainty = w[i] * (x_f - margin_target * a[i]) * d_f
+        unit_surplus = x_f - margin_target * q[i]
+        margin = w[i] * unit_surplus * g_f
+        if legacy_reference_as_cost:
+            uncertainty = w[i] * unit_surplus * d_f
+        else:
+            uncertainty = w[i] * np.abs(unit_surplus) * d_f
 
         group = [
             Option(value=float(vj), margin=float(sj), uncertainty=float(tj), price=float(xj))
@@ -135,4 +174,3 @@ def filter_admissible_options(
         filtered_items.append(admissible)
 
     return PricingInstance(items=filtered_items, gamma=instance.gamma, name=instance.name)
-

@@ -1,0 +1,300 @@
+{
+  "alpha": 0.1,
+  "calibration": {
+    "calibration_observations": 60,
+    "cells": [
+      [
+        "exchangeable_correlated",
+        "valid"
+      ],
+      [
+        "exchangeable_heavy_tail",
+        "valid"
+      ],
+      [
+        "ar1",
+        "negative_control"
+      ],
+      [
+        "change_point",
+        "negative_control"
+      ],
+      [
+        "menu_dependent",
+        "negative_control"
+      ]
+    ],
+    "gamma_rule": "ceil 90th upper empirical quantile of l1/linfinity effective support on tuning block, clipped to [1,n]",
+    "m": 5,
+    "n": 12,
+    "negative_control_shifts": {
+      "ar1_phi": 0.9,
+      "change_point": 0.5,
+      "menu_dependent": 0.25
+    },
+    "negative_controls": [
+      "ar1",
+      "change_point",
+      "menu_dependent"
+    ],
+    "positive_controls": [
+      "exchangeable_correlated",
+      "exchangeable_heavy_tail"
+    ],
+    "radius_rule": "split-conformal ceil((T+1)(1-alpha)) order statistic of max(linfinity,l1/Gamma) on disjoint calibration block",
+    "repetitions_per_cell": 120,
+    "test_observations_per_repetition": 1,
+    "tuning_observations": 40
+  },
+  "campaign_id": "2026-08-29-paper-a-v3-independent-rq",
+  "certificate_design": [
+    [
+      "favorable",
+      5101,
+      20,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5101,
+      20,
+      8,
+      "ten_percent"
+    ],
+    [
+      "favorable",
+      5101,
+      40,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5101,
+      40,
+      8,
+      "ten_percent"
+    ],
+    [
+      "favorable",
+      5102,
+      20,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5102,
+      20,
+      8,
+      "ten_percent"
+    ],
+    [
+      "favorable",
+      5102,
+      40,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5102,
+      40,
+      8,
+      "ten_percent"
+    ],
+    [
+      "adversarial",
+      6101,
+      20,
+      3,
+      "sqrt"
+    ],
+    [
+      "adversarial",
+      6101,
+      40,
+      3,
+      "sqrt"
+    ],
+    [
+      "adversarial",
+      6102,
+      20,
+      3,
+      "sqrt"
+    ],
+    [
+      "adversarial",
+      6102,
+      40,
+      3,
+      "sqrt"
+    ]
+  ],
+  "frozen_date": "2026-08-29",
+  "gamma_frontier": {
+    "certificate_schema": 2,
+    "gamma_values": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "m": 8,
+    "n": 20,
+    "radius": 0.12,
+    "seed": 5301
+  },
+  "independent_r_q_meaning": "separate nonidentical model inputs and code paths; not stochastic independence",
+  "interpretation": {
+    "calibration_study": "Monte Carlo coverage and realized-feasibility audit",
+    "certificate_study": "exact rational verification over authoritative binary64 snapshots",
+    "scaling_study": "floating full-family diagnostic; not an exact certificate"
+  },
+  "kappa": 1.25,
+  "numpy": "2.5.1",
+  "python": "3.12.12",
+  "quick": false,
+  "scaling_design": [
+    [
+      "favorable",
+      5201,
+      20,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5201,
+      40,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5201,
+      80,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5201,
+      160,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5202,
+      20,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5202,
+      40,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5202,
+      80,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5202,
+      160,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5203,
+      20,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5203,
+      40,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5203,
+      80,
+      8,
+      "sqrt"
+    ],
+    [
+      "favorable",
+      5203,
+      160,
+      8,
+      "sqrt"
+    ],
+    [
+      "adversarial",
+      6201,
+      20,
+      3,
+      "sqrt"
+    ],
+    [
+      "adversarial",
+      6201,
+      40,
+      3,
+      "sqrt"
+    ],
+    [
+      "adversarial",
+      6201,
+      80,
+      3,
+      "sqrt"
+    ],
+    [
+      "adversarial",
+      6201,
+      160,
+      3,
+      "sqrt"
+    ]
+  ],
+  "source_commit_at_run": "6ce61beed969b5dc0ead9b759cd83863fb671ac8",
+  "source_sha256": {
+    "scripts/run_v3_independent_rq_campaign.py": "2b326784852c26c442d3b9e4cd2b3a1514bf8afcdb1f012e9a63f5bf048a5549",
+    "scripts/verify_v3_independent_rq_release.py": "eab394a751e33fa8772c56d92630733013767736062ea1a4dd615535844171ec",
+    "src/robust_mckp/global_certificate.py": "0cf6488765e0853af22b30e8be42305003c0f05dcdde193bb0aa6e3d79bbe335",
+    "src/robust_mckp/preprocessing.py": "c3ffe2055ee02397982c316773306a14004bb3a25f68b627df350a94842286ac",
+    "src/robust_mckp/solver.py": "3e8ae23bf182a1435b4042f767e039af700e117d8fdd2bb7db0b39d8de578042"
+  },
+  "status": "frozen before manuscript use; not preregistered"
+}

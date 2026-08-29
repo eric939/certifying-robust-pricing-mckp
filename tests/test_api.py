@@ -38,6 +38,7 @@ def test_low_level_api_returns_feasible_solution() -> None:
 def test_from_pricing_data_filters_to_admissible_options() -> None:
     instance = from_pricing_data(
         reference_prices=[100.0],
+        unit_costs=[100.0],
         weights=[1.0],
         price_menus=[[80.0, 95.0, 100.0, 110.0, 125.0]],
         demands=[[1.0, 0.9, 0.85, 0.8, 0.7]],
@@ -50,6 +51,75 @@ def test_from_pricing_data_filters_to_admissible_options() -> None:
     kept_prices = [opt.price for opt in instance.items[0]]
 
     assert kept_prices == pytest.approx([95.0, 100.0, 110.0])
+
+
+def test_from_pricing_data_separates_reference_price_and_unit_cost() -> None:
+    instance = from_pricing_data(
+        reference_prices=[100.0],
+        unit_costs=[60.0],
+        weights=[2.0],
+        price_menus=[[90.0, 100.0, 110.0]],
+        demands=[[3.0, 2.0, 1.0]],
+        uncertainties=[[0.30, 0.20, 0.10]],
+        margin_target=1.25,
+        tolerances=[0.10],
+        gamma=1,
+    )
+
+    # r=100 filters the menu; q=60 alone enters the economic coefficients.
+    options = instance.items[0]
+    assert [option.price for option in options] == pytest.approx([90.0, 100.0, 110.0])
+    assert [option.margin for option in options] == pytest.approx(
+        [2.0 * (90.0 - 1.25 * 60.0) * 3.0,
+         2.0 * (100.0 - 1.25 * 60.0) * 2.0,
+         2.0 * (110.0 - 1.25 * 60.0) * 1.0]
+    )
+    assert [option.uncertainty for option in options] == pytest.approx(
+        [2.0 * abs(90.0 - 1.25 * 60.0) * 0.30,
+         2.0 * abs(100.0 - 1.25 * 60.0) * 0.20,
+         2.0 * abs(110.0 - 1.25 * 60.0) * 0.10]
+    )
+
+
+def test_from_pricing_data_legacy_path_is_explicit_and_compatible() -> None:
+    kwargs = dict(
+        reference_prices=[100.0],
+        weights=[1.0],
+        price_menus=[[90.0, 100.0, 110.0]],
+        demands=[[1.0, 1.0, 1.0]],
+        uncertainties=[[0.1, 0.1, 0.1]],
+        margin_target=1.0,
+        tolerances=[0.10],
+        gamma=1,
+    )
+    with pytest.warns(DeprecationWarning, match="legacy q_i = r_i"):
+        legacy = from_pricing_data(**kwargs)
+    explicit = from_pricing_data(**kwargs, unit_costs=[100.0])
+
+    assert [option.value for option in legacy.items[0]] == pytest.approx(
+        [option.value for option in explicit.items[0]]
+    )
+    assert [option.margin for option in legacy.items[0]] == pytest.approx(
+        [option.margin for option in explicit.items[0]]
+    )
+    assert [abs(option.uncertainty) for option in legacy.items[0]] == pytest.approx(
+        [option.uncertainty for option in explicit.items[0]]
+    )
+
+
+def test_from_pricing_data_rejects_bad_unit_cost_shape() -> None:
+    with pytest.raises(ValueError, match="must have same length"):
+        from_pricing_data(
+            reference_prices=[100.0, 110.0],
+            unit_costs=[60.0],
+            weights=[1.0, 1.0],
+            price_menus=[[100.0], [110.0]],
+            demands=[[1.0], [1.0]],
+            uncertainties=[[0.1], [0.1]],
+            margin_target=1.2,
+            tolerances=[0.1, 0.1],
+            gamma=1,
+        )
 
 
 def test_filter_admissible_options_on_low_level_instance() -> None:
@@ -73,6 +143,7 @@ def test_filter_admissible_options_on_low_level_instance() -> None:
 def test_optimized_solver_matches_naive_reference_on_small_instance() -> None:
     instance = from_pricing_data(
         reference_prices=[100.0, 110.0, 95.0],
+        unit_costs=[100.0, 110.0, 95.0],
         weights=[1.0, 0.8, 1.2],
         price_menus=[
             [90.0, 100.0, 110.0],

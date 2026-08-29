@@ -27,16 +27,18 @@ from .local_budget import (
 )
 from .milp_baselines import MILPBaselineResult, solve_theta_decomposition_milp_baseline
 from .global_certificate import (
+    ExactLPGroupPosition,
     FixedThetaDualCertificate,
     GlobalCertificateVerification,
     GlobalDualCertificate,
+    LPToRoundingProvenance,
     build_global_certificate,
     instance_sha256,
     original_theta_candidates,
     verify_global_certificate,
 )
 
-__version__ = "3.0.1"
+__version__ = "3.1.0"
 
 __all__ = [
     "__version__",
@@ -64,9 +66,11 @@ __all__ = [
     "solve_segment_local_exact",
     "MILPBaselineResult",
     "solve_theta_decomposition_milp_baseline",
+    "ExactLPGroupPosition",
     "FixedThetaDualCertificate",
     "GlobalCertificateVerification",
     "GlobalDualCertificate",
+    "LPToRoundingProvenance",
     "build_global_certificate",
     "instance_sha256",
     "original_theta_candidates",

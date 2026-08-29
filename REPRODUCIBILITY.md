@@ -16,14 +16,17 @@ make verify PYTHON=.venv/bin/python
 
 The verification target checks:
 
-1. all 122 tests;
+1. the complete test suite;
 2. the frozen baseline release and its scientific gates;
 3. both nested v3 manifests and every released byte;
 4. all 135 controlled full-family certificates against frozen exact binary64
    instance snapshots, without platform-dependent generator reconstruction;
 5. all three pilot certificates after reconstruction from the public derived
    model record; and
-6. the absence of tracked manuscript, build, and restricted-data artifacts.
+6. the separated-reference/cost manifest, schema-v2 exact certificates and
+   rounding witnesses, calibration implication audit, and integer-Gamma
+   frontier; and
+7. the absence of tracked manuscript, build, and restricted-data artifacts.
 
 It does not require manuscript source, a TeX system, or the Dominick's raw
 files.
@@ -55,6 +58,25 @@ The audit validates the global robust optimum against independent oracles,
 fixed-threshold LP bounds, the full binary64-distinct threshold family,
 parametric-sweep reconstruction, and HullRound's robust certificate. Timing
 observations are evidence, never proofs.
+
+## Rebuild the separated-reference/cost campaign
+
+The campaign uses fixed seeds and refuses to overwrite its destination. Run it
+into a new local directory, then verify every released hash and exact
+certificate from the stored binary64 inputs:
+
+```bash
+.venv/bin/python scripts/run_v3_independent_rq_campaign.py \
+  --output-dir results/local/v3-independent-rq
+.venv/bin/python scripts/verify_v3_independent_rq_release.py \
+  --release-dir results/local/v3-independent-rq
+```
+
+Its favorable/adversarial study and integer-Gamma frontier use schema-v2
+rational certificates. The larger scaling table is a floating diagnostic. The
+calibration study separates tuning, calibration, and one-step evaluation;
+exchangeable correlated and heavy-tail cells are positive controls, while
+AR(1), change-point, and menu-dependent cells are assumption stress tests.
 
 ## Rebuild the v3 controlled certificate study
 

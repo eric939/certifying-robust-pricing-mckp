@@ -14,7 +14,11 @@ class Option:
     Attributes:
         value: Objective coefficient v[i,j].
         margin: Nominal margin contribution s[i,j].
-        uncertainty: Uncertainty contribution t[i,j].
+        uncertainty: Stored uncertainty contribution.  New code should pass
+            the nonnegative endpoint loss t[i,j].  Negative values remain
+            accepted solely for legacy release compatibility and are
+            canonically interpreted as t[i,j] = abs(uncertainty) by every
+            solver and certificate path.
         price: Optional price level x_{i,j} for reference.
     """
 
