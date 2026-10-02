@@ -4,7 +4,8 @@ from __future__ import annotations
 import math
 import numbers
 from dataclasses import dataclass, field
-from typing import Iterable, List, Optional, Sequence
+from fractions import Fraction
+from typing import Iterable, List, Optional, Sequence, Union
 
 
 @dataclass(frozen=True)
@@ -23,10 +24,10 @@ class Option:
         original_index: Optional option ID in the supplied unfiltered menu.
     """
 
-    value: float
-    margin: float
-    uncertainty: float
-    price: Optional[float] = None
+    value: Union[float, Fraction]
+    margin: Union[float, Fraction]
+    uncertainty: Union[float, Fraction]
+    price: Optional[Union[float, Fraction]] = None
     original_index: Optional[int] = None
 
     def __post_init__(self) -> None:
@@ -34,12 +35,12 @@ class Option:
             value = getattr(self, name)
             if not isinstance(value, numbers.Real) or isinstance(value, bool):
                 raise TypeError(f"{name} must be a real number")
-            if not math.isfinite(float(value)):
+            if not isinstance(value, Fraction) and not math.isfinite(float(value)):
                 raise ValueError(f"{name} must be finite")
         if self.price is not None:
             if not isinstance(self.price, numbers.Real) or isinstance(self.price, bool):
                 raise TypeError("price must be a real number when provided")
-            if not math.isfinite(float(self.price)):
+            if not isinstance(self.price, Fraction) and not math.isfinite(float(self.price)):
                 raise ValueError("price must be finite when provided")
         if self.original_index is not None:
             if not isinstance(self.original_index, numbers.Integral) or isinstance(self.original_index, bool):

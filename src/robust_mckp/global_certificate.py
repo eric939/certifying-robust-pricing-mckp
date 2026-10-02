@@ -2,8 +2,9 @@
 
 The optimization algorithms in :mod:`robust_mckp` use floating-point LP
 bounds and numerical comparison tolerances.  This module is deliberately
-separate from those algorithms.  It interprets every input coefficient as the
-exact rational number represented by its binary64 bits, retains the complete
+separate from those algorithms. Explicit Fraction coefficients retain their
+exact rational values; other native coefficients retain their historical
+binary64 interpretation. The checker retains the complete
 set consisting of zero and every distinct original deviation, and records one
 exact Lagrangian multiplier per feasible fixed-threshold MCKP.
 
@@ -79,8 +80,10 @@ def _as_exact_fraction(value: FractionInput, field: str) -> Fraction:
 
 
 def _binary64_fraction(value: numbers.Real) -> Fraction:
-    """Return the exact rational represented by ``float(value)``."""
+    """Preserve explicit Fraction inputs; decode legacy native inputs as before."""
 
+    if isinstance(value, Fraction):
+        return value
     binary64 = float(value)
     if not math.isfinite(binary64):
         raise ValueError("instance coefficients must be finite")
@@ -88,23 +91,34 @@ def _binary64_fraction(value: numbers.Real) -> Fraction:
 
 
 def instance_sha256(instance: PricingInstance) -> str:
-    """Hash the ordered binary64 instance coefficients and group structure."""
+    """Bind ordered coefficients/structure; preserve historical binary64 hashes.
 
+    Explicit rational inputs use a distinct interpretation tag and canonical
+    fraction strings and additionally bind original option IDs.
+    """
+
+    rational_input = any(isinstance(value, Fraction) for group in instance.items
+        for option in group for value in (option.value, option.margin, option.uncertainty, option.price))
+    def encode(value):
+        if rational_input:
+            return _fraction_text(_binary64_fraction(value))
+        return float(value).hex()
     groups = []
     for group in instance.items:
         encoded_group = []
         for option in group:
             encoded_group.append(
                 {
-                    "value": float(option.value).hex(),
-                    "margin": float(option.margin).hex(),
-                    "uncertainty": float(option.uncertainty).hex(),
-                    "price": None if option.price is None else float(option.price).hex(),
+                    "value": encode(option.value),
+                    "margin": encode(option.margin),
+                    "uncertainty": encode(option.uncertainty),
+                    "price": None if option.price is None else encode(option.price),
+                    **({"original_index":option.original_index} if rational_input else {}),
                 }
             )
         groups.append(encoded_group)
     payload = {
-        "coefficient_interpretation": "exact_binary64",
+        "coefficient_interpretation": "exact_rational_or_decoded_binary64" if rational_input else "exact_binary64",
         "gamma": int(instance.gamma),
         "groups": groups,
     }
