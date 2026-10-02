@@ -20,12 +20,14 @@ class Option:
             canonically interpreted as t[i,j] = abs(uncertainty) by every
             solver and certificate path.
         price: Optional price level x_{i,j} for reference.
+        original_index: Optional option ID in the supplied unfiltered menu.
     """
 
     value: float
     margin: float
     uncertainty: float
     price: Optional[float] = None
+    original_index: Optional[int] = None
 
     def __post_init__(self) -> None:
         for name in ("value", "margin", "uncertainty"):
@@ -39,6 +41,11 @@ class Option:
                 raise TypeError("price must be a real number when provided")
             if not math.isfinite(float(self.price)):
                 raise ValueError("price must be finite when provided")
+        if self.original_index is not None:
+            if not isinstance(self.original_index, numbers.Integral) or isinstance(self.original_index, bool):
+                raise TypeError("original_index must be an integer when provided")
+            if self.original_index < 0:
+                raise ValueError("original_index must be nonnegative")
 
 
 @dataclass
@@ -79,6 +86,20 @@ class PricingInstance:
         """Total number of options across all groups."""
 
         return sum(len(group) for group in self.items)
+
+    def original_selection(self, selections: Sequence[int]) -> List[int]:
+        """Map a solver's filtered indices back to the original supplied menus."""
+        if len(selections) != self.n_items:
+            raise ValueError("selections length must match number of items")
+        original = []
+        for group, j in zip(self.items, selections):
+            if not isinstance(j, numbers.Integral) or isinstance(j, bool):
+                raise TypeError("selection index must be an integer")
+            if not 0 <= j < len(group):
+                raise ValueError("selection index outside filtered menu")
+            option = group[int(j)]
+            original.append(int(j if option.original_index is None else option.original_index))
+        return original
 
 
 @dataclass

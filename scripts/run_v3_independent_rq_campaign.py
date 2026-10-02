@@ -43,6 +43,7 @@ from robust_mckp.certificate import certificate_is_feasible, compute_certificate
 from robust_mckp.greedy import greedy_lp  # noqa: E402
 from robust_mckp.hull import build_upper_hull  # noqa: E402
 from robust_mckp.utils import EPS  # noqa: E402
+from robust_mckp.primitive_admissibility import inward_generated_price  # noqa: E402
 from scripts.run_publishable_experiments import solve_full_robust_highs  # noqa: E402
 
 
@@ -174,7 +175,8 @@ def generate_pricing_data(
     demands: List[np.ndarray] = []
     for i in range(n):
         offsets = _bounded_price_grid(m, sigma, phase=0.13 * (i + 1))
-        prices = reference[i] * (1.0 + offsets)
+        prices = np.asarray([inward_generated_price(p, reference[i], sigma)
+                             for p in reference[i] * (1.0 + offsets)], dtype=float)
         demand = baseline[i] * np.power(prices / reference[i], -elasticities[i])
         menus.append(prices.astype(float))
         demands.append(demand.astype(float))
@@ -873,12 +875,12 @@ def run_calibration_study(*, quick: bool) -> List[Dict[str, Any]]:
                 policy_test = _policy_test_residual(
                     cell=cell,
                     raw=raw,
-                    selections=solution.selections,
+                    selections=instances[policy].original_selection(solution.selections),
                     base_residual=base_test,
                 )
                 if policy == "robust":
                     robust_test = policy_test
-                realized = _realized_policy_metrics(raw, solution.selections, policy_test)
+                realized = _realized_policy_metrics(raw, instances[policy].original_selection(solution.selections), policy_test)
                 tolerance = 1e-8 * max(1.0, abs(float(solution.objective)))
                 row[policy + "_objective"] = float(solution.objective)
                 row[policy + "_realized_margin"] = realized["realized_margin"]
@@ -887,7 +889,7 @@ def run_calibration_study(*, quick: bool) -> List[Dict[str, Any]]:
                     realized["realized_margin"] < -tolerance
                 )
                 row[policy + "_negative_selected"] = _selected_negative_count(
-                    raw, solution.selections
+                    raw, instances[policy].original_selection(solution.selections)
                 )
                 row[policy + "_model_certificate_residual"] = _direct_residual(
                     instances[policy], solution.selections

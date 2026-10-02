@@ -2,13 +2,13 @@
 from __future__ import annotations
 
 import warnings
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Iterable, List, Optional, Sequence
 
 import numpy as np
 
 from .model import Option, PricingInstance
-from .utils import EPS
+from .primitive_admissibility import price_is_admissible
 
 
 def _as_array_1d(x: Sequence[float], name: str) -> np.ndarray:
@@ -36,8 +36,8 @@ def from_pricing_data(
         s[i,j] = ω_i * (x_{i,j} - κ q_i) * ĝ_i(x_{i,j})
         t[i,j] = ω_i * |x_{i,j} - κ q_i| * d_adv[i,j]
 
-    Admissible options are filtered by the interval
-    [(1-σ_i) r_i, (1+σ_i) r_i].  Thus ``reference_prices`` control
+    Admissible positive prices satisfy |p-r_i| <= σ_i*r_i, evaluated on
+    the exact rational values represented by the input floats. Thus ``reference_prices`` control
     admissibility only, while ``unit_costs`` control the economic ratio.
 
     For releases made before the reference-price/unit-cost distinction was
@@ -107,9 +107,7 @@ def from_pricing_data(
         if x.ndim != 1:
             raise ValueError(f"price menu for item {i} must be 1D")
 
-        lower = (1.0 - sigma[i]) * r[i]
-        upper = (1.0 + sigma[i]) * r[i]
-        mask = (x >= lower - EPS) & (x <= upper + EPS)
+        mask = np.asarray([price_is_admissible(p, r[i], sigma[i]) for p in x], dtype=bool)
         if not np.any(mask):
             raise ValueError(f"no admissible options for item {i}")
 
@@ -126,8 +124,9 @@ def from_pricing_data(
             uncertainty = w[i] * np.abs(unit_surplus) * d_f
 
         group = [
-            Option(value=float(vj), margin=float(sj), uncertainty=float(tj), price=float(xj))
-            for vj, sj, tj, xj in zip(v, margin, uncertainty, x_f)
+            Option(value=float(vj), margin=float(sj), uncertainty=float(tj), price=float(xj),
+                   original_index=int(original_j))
+            for vj, sj, tj, xj, original_j in zip(v, margin, uncertainty, x_f, np.flatnonzero(mask))
         ]
         items.append(group)
 
@@ -161,14 +160,12 @@ def filter_admissible_options(
 
     filtered_items: List[List[Option]] = []
     for i, group in enumerate(instance.items):
-        lower = (1.0 - sigma[i]) * a[i]
-        upper = (1.0 + sigma[i]) * a[i]
         admissible: List[Option] = []
-        for opt in group:
+        for j, opt in enumerate(group):
             if opt.price is None:
                 raise ValueError("Option.price must be set to filter admissible options")
-            if lower - EPS <= opt.price <= upper + EPS:
-                admissible.append(opt)
+            if price_is_admissible(opt.price, a[i], sigma[i]):
+                admissible.append(opt if opt.original_index is not None else replace(opt, original_index=j))
         if not admissible:
             raise ValueError(f"no admissible options for item {i}")
         filtered_items.append(admissible)
