@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite the software and the accompanying manuscript."
-title: "certifying-robust-pricing-mckp"
+title: "robust_mckp: certified solvers for Gamma-robust finite-menu pricing (certifying-robust-pricing-mckp)"
 type: software
-version: "3.1.1"
+version: "4.0.0"
 license: "MIT"
 repository-code: "https://github.com/eric939/certifying-robust-pricing-mckp"
 url: "https://github.com/eric939/certifying-robust-pricing-mckp"
-date-released: 2026-08-29
+date-released: 2026-11-01
 authors:
   - family-names: "Shao"
     given-names: "Zi Yuan Eric"
@@ -16,6 +16,7 @@ preferred-citation:
   type: article
   title: "Exact Endpoint Protection and Verifiable Optimality Bounds for Gamma-Robust Finite-Menu Pricing"
   year: 2026
+  status: preprint
   journal: "arXiv preprint arXiv:2603.18653"
   url: "https://arxiv.org/abs/2603.18653"
   authors:

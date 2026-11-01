@@ -1,17 +1,87 @@
 # Reproducibility
 
-## Environment
+## Environments
 
-The checked-in `uv.lock` freezes the dependency graph used by the release.
+- Library and tests: `uv sync --extra dev --extra milp --extra scip` (the
+  checked-in `uv.lock` freezes the dependency graph).
+- The revised paper's campaigns ran on Python 3.12.12 (macOS arm64) with the
+  package versions in `studies/paper-a-revision/requirements-study.txt`.
+  `make study-env` creates `.venv-study` with exactly these. The tables are
+  reproduced byte for byte with other versions too; the figure PDF only with
+  the recorded matplotlib.
+
+## Revised paper (v4): verify the released evidence
 
 ```bash
-uv sync --extra experiments --extra validation --extra dev
+make study-env
+make verify-evidence PYTHON=.venv-study/bin/python       # a few minutes
+make verify-evidence-full PYTHON=.venv-study/bin/python  # + portfolios and re-runs
 ```
 
-## Verify the released evidence
+`studies/paper-a-revision/verify_evidence.py` checks, for both protocols:
+
+1. every file in `MANIFEST.sha256`, except those the public tree omits because
+   they are regenerated: the protocol-v1 base portfolios (`instances/`,
+   139 MB) and the generated LaTeX tables and figure (`reporting/*.tex`,
+   `reporting/*.pdf`, kept out of the tree with the other manuscript files);
+2. the frozen copies of protocol and code against `FROZEN_SOURCES.sha256`;
+3. that `planned_tasks.json` equals the task list of `study/protocol.py` and
+   `study/protocol_v2.py`, with exactly one raw record per planned run;
+4. that every derived file (per-run CSVs, summaries, all LaTeX tables and the
+   figure) rebuilt from the raw records alone equals the manifest byte for byte;
+5. (`--instances`) that all 66 + 24 base portfolios regenerated from their
+   seeds equal their recorded hashes;
+6. (`--rerun K`) that K sampled runs on small instances, repeated with the
+   library, reproduce status, objective, bound and original menu IDs exactly
+   (MILP solvers: objective within the 1e-6 tolerance). Runs that ended at a
+   time limit are not sampled.
+
+## Revised paper (v4): re-run a campaign
+
+Use new, empty evidence directories; never write into a dated release.
 
 ```bash
-make verify PYTHON=.venv/bin/python
+cd studies/paper-a-revision && source env.sh
+PY=../../.venv-study/bin/python
+# protocol v1: freeze, base portfolios, validation panel, 1,764 runs
+$PY -m study.run_campaign --evidence /path/to/new-v1 --stage freeze
+$PY -m study.run_campaign --evidence /path/to/new-v1 --stage instances
+$PY -m study.run_campaign --evidence /path/to/new-v1 --stage validate
+$PY -m study.run_campaign --evidence /path/to/new-v1 --stage run --workers 3
+# protocol v2 reads the v1 portfolios from PAPER_A_V1_EVIDENCE
+export PAPER_A_V1_EVIDENCE=/path/to/new-v1
+$PY -m study.run_campaign_v2 --evidence /path/to/new-v2 --stage freeze
+$PY -m study.run_campaign_v2 --evidence /path/to/new-v2 --stage instances
+$PY -m study.run_campaign_v2 --evidence /path/to/new-v2 --stage robustness
+$PY -m study.run_campaign_v2 --evidence /path/to/new-v2 --stage run --workers 3
+# tables, macros, supplement and figure
+$PY -m study.report /path/to/new-v1 /path/to/generated /path/to/figures
+$PY -m study.report_v2 /path/to/new-v2 /path/to/generated /path/to/figures
+```
+
+Protocol v1 takes about a day on three workers (Panel L has a 600 s limit);
+protocol v2 a few hours. To re-run against the released portfolios instead of
+regenerated ones, first store them with
+`python verify_evidence.py --instances --write-instances`. Objectives, bounds
+and decisions of runs that finish within their limit are reproducible;
+running times are not.
+
+`make reproduce-smoke` runs the validation panel (180 small instances, every
+method against brute force and the exact certificate). The released
+`validation.json` records 179 of 180 checks passing; the one failure is the
+v3 reference-solver defect fixed in v4 (`VALIDATION_NOTE.md`), so a v4 run
+passes all 180.
+
+## v3 releases
+
+The v3 evidence was produced by tag `v3.1.1`; its verifiers pin the hashes of
+the v3 sources and therefore run against that tag.
+
+### Verify the released evidence
+
+```bash
+make verify-archive PYTHON=.venv/bin/python   # from a v4 checkout
+make verify PYTHON=.venv/bin/python           # inside a v3.1.1 checkout
 ```
 
 The verification target checks:
@@ -31,7 +101,7 @@ The verification target checks:
 It does not require manuscript source, a TeX system, or the Dominick's raw
 files.
 
-## Fresh bounded reproduction
+### Fresh bounded reproduction
 
 ```bash
 make reproduce-smoke PYTHON=.venv/bin/python
@@ -41,7 +111,7 @@ This writes only to `results/local/`: it runs a reduced mathematical audit and
 then regenerates a reduced solver/certificate/scalability release from that
 audit. The canonical released numbers remain immutable.
 
-## Full evidence regeneration
+### Full evidence regeneration
 
 Use a new, empty output directory; never overwrite a dated release.
 
@@ -59,7 +129,7 @@ fixed-threshold LP bounds, the full binary64-distinct threshold family,
 parametric-sweep reconstruction, and HullRound's robust certificate. Timing
 observations are evidence, never proofs.
 
-## Rebuild the separated-reference/cost campaign
+### Rebuild the separated-reference/cost campaign
 
 The campaign uses fixed seeds and refuses to overwrite its destination. Run it
 into a new local directory, then verify every released hash and exact
@@ -78,7 +148,7 @@ calibration study separates tuning, calibration, and one-step evaluation;
 exchangeable correlated and heavy-tail cells are positive controls, while
 AR(1), change-point, and menu-dependent cells are assumption stress tests.
 
-## Rebuild the v3 controlled certificate study
+### Rebuild the v3 controlled certificate study
 
 The v3 study reads the immutable baseline comparison table and always writes
 to a new local directory:
@@ -102,7 +172,7 @@ binary64 hexadecimal string. These snapshots are authoritative for portable
 certificate verification because transcendental generator calculations can
 differ by a final bit across numerical platforms.
 
-## Rebuild the exploratory Dominick's pilot
+### Rebuild the exploratory Dominick's pilot
 
 Obtain `wcer.zip` and `upccer.csv` directly from the Kilts Center under its
 terms, then run:

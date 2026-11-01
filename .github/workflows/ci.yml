@@ -1,8 +1,9 @@
-name: reproducibility verification
+name: tests and reproducibility
 
 on:
   push:
     branches: [main]
+    tags: ["v*"]
   pull_request:
     branches: [main]
 
@@ -10,18 +11,49 @@ permissions:
   contents: read
 
 jobs:
-  verify:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
+  tests:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ["3.10", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
       - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
-      - name: Install verification dependencies
-        run: uv sync --frozen --extra experiments --extra validation --extra dev
-      - name: Verify tests, evidence, certificates, and public-tree hygiene
-        run: make verify PYTHON=.venv/bin/python
+      - name: Install the library with all extras
+        run: uv sync --frozen --python ${{ matrix.python }} --all-extras
+      - name: Tests
+        run: make test PYTHON=.venv/bin/python
+      - name: Examples
+        run: make examples PYTHON=.venv/bin/python
+
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # verify-archive checks out tag v3.1.1
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Campaign environment
+        run: make study-env
+      - name: Revised paper evidence (integrity, design, rebuilt reports, portfolios, re-runs)
+        run: make verify-evidence-full PYTHON=.venv-study/bin/python
+      - name: v3 evidence against tag v3.1.1
+        run: make verify-archive PYTHON=.venv-study/bin/python
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v6
+      - name: Build and check the distributions
+        run: |
+          uv sync --frozen --python 3.12 --extra dev
+          make build PYTHON=.venv/bin/python
