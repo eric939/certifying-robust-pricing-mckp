@@ -30,7 +30,13 @@ make verify-evidence-full PYTHON=.venv-study/bin/python  # + portfolios and re-r
 4. that every derived file (per-run CSVs, summaries, all LaTeX tables and the
    figure) rebuilt from the raw records alone equals the manifest byte for byte;
 5. (`--instances`) that all 66 + 24 base portfolios regenerated from their
-   seeds equal their recorded hashes;
+   seeds equal their recorded hashes. The generator draws normals and applies
+   `np.exp` and powers, whose results can differ in the last bit between
+   platforms; the hashes are those of macOS on Apple silicon, where the
+   campaigns ran and where CI checks this step. On other platforms the
+   regenerated portfolios can differ in final bits. The 24 protocol-v2
+   portfolios of Panel H are stored in the tree; for the exact protocol-v1
+   portfolios, regenerate them on macOS on Apple silicon;
 6. (`--rerun K`) that K sampled runs on small instances, repeated with the
    library, reproduce status, objective, bound and original menu IDs exactly
    (MILP solvers: objective within the 1e-6 tolerance). Runs that ended at a
