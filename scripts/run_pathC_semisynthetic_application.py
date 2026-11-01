@@ -21,7 +21,7 @@ if str(ROOT) not in sys.path:
 if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
-from robust_mckp import GlobalThetaBNBConfig, PricingInstance, from_pricing_data, solve, solve_global_theta_bnb  # noqa: E402
+from robust_mckp import GlobalThetaBNBConfig, PricingInstance, from_pricing_data, solve_reference as solve, solve_global_theta_bnb  # noqa: E402
 from robust_mckp.certificate import compute_certificate  # noqa: E402
 
 

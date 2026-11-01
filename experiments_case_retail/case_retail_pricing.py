@@ -24,7 +24,7 @@ from _bootstrap import ensure_src_on_path
 
 ensure_src_on_path()
 
-from robust_mckp import PricingInstance, from_pricing_data, solve
+from robust_mckp import PricingInstance, from_pricing_data, solve_reference as solve
 from robust_mckp.greedy import greedy_lp
 from robust_mckp.hull import build_upper_hull
 from robust_mckp.utils import EPS

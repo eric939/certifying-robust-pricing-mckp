@@ -1,8 +1,19 @@
-"""Robust MCKP pricing optimization package."""
+"""Certified solvers for finite-menu Gamma-robust pricing and the robust MCKP.
+
+Start with :func:`solve`, :func:`verify` and :func:`instance_from_arrays` or
+:func:`from_pricing_data`; see the README for a tour.
+"""
 
 from .model import Option, PricingInstance, Solution
 from .preprocessing import filter_admissible_options, from_pricing_data
-from .solver import solve
+from .solver import solve as solve_reference
+from .api import METHODS, Result, Verification, certify, instance_from_arrays, solve, verify
+from .flat import FlatInstance
+from .primitive_certificate import (
+    ExactPrimitivePricingData,
+    build_primitive_certificate,
+    verify_primitive_certificate,
+)
 from .exact_bnb import (
     FixedThetaBNBConfig,
     FixedThetaBNBResult,
@@ -38,16 +49,27 @@ from .global_certificate import (
     verify_global_certificate,
 )
 
-__version__ = "3.1.1"
+__version__ = "4.0.0"
 
 __all__ = [
     "__version__",
+    "solve",
+    "verify",
+    "certify",
+    "instance_from_arrays",
+    "METHODS",
+    "Result",
+    "Verification",
+    "FlatInstance",
+    "ExactPrimitivePricingData",
+    "build_primitive_certificate",
+    "verify_primitive_certificate",
     "Option",
     "PricingInstance",
     "Solution",
     "from_pricing_data",
     "filter_admissible_options",
-    "solve",
+    "solve_reference",
     "FixedThetaBNBConfig",
     "FixedThetaBNBResult",
     "GlobalThetaBNBConfig",

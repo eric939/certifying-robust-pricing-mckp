@@ -4,7 +4,7 @@ import math
 import numpy as np
 import pytest
 
-from robust_mckp import Option, PricingInstance, from_pricing_data, filter_admissible_options, solve
+from robust_mckp import Option, PricingInstance, from_pricing_data, filter_admissible_options, solve_reference as solve
 from robust_mckp.primitive_admissibility import price_is_admissible, inward_generated_price
 from scripts.run_v3_independent_rq_campaign import generate_pricing_data
 

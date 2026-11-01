@@ -13,7 +13,7 @@ from _bootstrap import ensure_src_on_path
 
 ensure_src_on_path()
 
-from robust_mckp import solve
+from robust_mckp import solve_reference as solve
 
 from _common import (
     build_prefix_instance,

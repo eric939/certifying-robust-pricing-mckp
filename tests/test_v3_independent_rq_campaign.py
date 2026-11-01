@@ -5,7 +5,7 @@ import copy
 import numpy as np
 import pytest
 
-from robust_mckp import instance_sha256, solve
+from robust_mckp import instance_sha256, solve_reference as solve
 from scripts import run_v3_independent_rq_campaign as campaign
 from scripts import verify_v3_independent_rq_release as release_verifier
 

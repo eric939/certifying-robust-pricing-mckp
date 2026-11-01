@@ -34,7 +34,7 @@ from experiments_nested._common import (  # noqa: E402
     round_down_value,
     selected_option_data,
 )
-from robust_mckp import PricingInstance, solve  # noqa: E402
+from robust_mckp import PricingInstance, solve_reference as solve  # noqa: E402
 from robust_mckp.certificate import compute_certificate  # noqa: E402
 from robust_mckp.greedy import greedy_lp  # noqa: E402
 from robust_mckp.rounding import round_lp_solution  # noqa: E402

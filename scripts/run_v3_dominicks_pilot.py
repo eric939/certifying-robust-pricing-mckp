@@ -36,7 +36,7 @@ import sys
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from robust_mckp import Option, PricingInstance, solve  # noqa: E402
+from robust_mckp import Option, PricingInstance, solve_reference as solve  # noqa: E402
 from robust_mckp.certificate import compute_certificate  # noqa: E402
 from robust_mckp.global_certificate import (  # noqa: E402
     build_global_certificate,

@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 
-from robust_mckp import FixedThetaBNBConfig, GlobalThetaBNBConfig, Option, PricingInstance, solve
+from robust_mckp import FixedThetaBNBConfig, GlobalThetaBNBConfig, Option, PricingInstance, solve_reference as solve
 from robust_mckp.exact_bnb import (
     brute_force_global_robust,
     build_full_theta_candidates,

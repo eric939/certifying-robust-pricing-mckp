@@ -21,7 +21,7 @@ for path in [ROOT, ROOT / "src", ROOT / "experiments_nested"]:
         sys.path.insert(0, str(path))
 
 from experiments_nested._common import build_prefix_instance, make_master_portfolio  # noqa: E402
-from robust_mckp import GlobalThetaBNBConfig, Option, PricingInstance, solve  # noqa: E402
+from robust_mckp import GlobalThetaBNBConfig, Option, PricingInstance, solve_reference as solve  # noqa: E402
 from robust_mckp.certificate import certificate_is_feasible, compute_certificate  # noqa: E402
 from robust_mckp.exact_bnb import solve_global_theta_bnb  # noqa: E402
 

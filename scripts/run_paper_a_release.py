@@ -35,7 +35,7 @@ from experiments_nested._common import (  # noqa: E402
     hull_sizes_for_theta,
     make_master_portfolio,
 )
-from robust_mckp import GlobalThetaBNBConfig, solve  # noqa: E402
+from robust_mckp import GlobalThetaBNBConfig, solve_reference as solve  # noqa: E402
 from robust_mckp.certificate import certificate_is_feasible, compute_certificate  # noqa: E402
 from robust_mckp.exact_bnb import solve_global_theta_bnb  # noqa: E402
 from scripts.run_publishable_experiments import (  # noqa: E402

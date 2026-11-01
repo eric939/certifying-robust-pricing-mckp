@@ -14,7 +14,7 @@ from _bootstrap import ensure_src_on_path
 
 ensure_src_on_path()
 
-from robust_mckp import solve
+from robust_mckp import solve_reference as solve
 from robust_mckp.greedy import greedy_lp
 from robust_mckp.utils import EPS
 

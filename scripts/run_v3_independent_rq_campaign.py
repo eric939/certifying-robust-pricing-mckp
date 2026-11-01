@@ -36,7 +36,7 @@ from robust_mckp import (  # noqa: E402
     PricingInstance,
     build_global_certificate,
     from_pricing_data,
-    solve,
+    solve_reference as solve,
     verify_global_certificate,
 )
 from robust_mckp.certificate import certificate_is_feasible, compute_certificate  # noqa: E402

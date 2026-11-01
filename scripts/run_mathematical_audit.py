@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
-from robust_mckp import GlobalThetaBNBConfig, Option, PricingInstance, solve  # noqa: E402
+from robust_mckp import GlobalThetaBNBConfig, Option, PricingInstance, solve_reference as solve  # noqa: E402
 from robust_mckp.certificate import certificate_is_feasible, compute_certificate  # noqa: E402
 from robust_mckp.exact_bnb import (  # noqa: E402
     brute_force_global_robust,

@@ -38,7 +38,7 @@ from experiments_nested._common import (  # noqa: E402
 from robust_mckp import (  # noqa: E402
     GlobalThetaBNBConfig,
     PricingInstance,
-    solve,
+    solve_reference as solve,
     solve_global_theta_bnb,
 )
 from robust_mckp.certificate import certificate_is_feasible  # noqa: E402

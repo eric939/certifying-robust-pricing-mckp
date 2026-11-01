@@ -49,7 +49,7 @@ from experiments_case_retail.case_retail_pricing import (  # noqa: E402
     generate_retail_portfolio,
     simulate_iid_exact as retail_simulate_iid,
 )
-from robust_mckp import PricingInstance, solve  # noqa: E402
+from robust_mckp import PricingInstance, solve_reference as solve  # noqa: E402
 from robust_mckp.certificate import certificate_is_feasible, compute_certificate  # noqa: E402
 from robust_mckp.greedy import greedy_lp  # noqa: E402
 from robust_mckp.utils import EPS  # noqa: E402

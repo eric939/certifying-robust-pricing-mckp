@@ -15,7 +15,7 @@ from _bootstrap import ensure_src_on_path
 
 ensure_src_on_path()
 
-from robust_mckp import Option, PricingInstance, solve
+from robust_mckp import Option, PricingInstance, solve_reference as solve
 from robust_mckp.certificate import compute_certificate
 from robust_mckp.greedy import greedy_lp
 from robust_mckp.rounding import round_lp_solution

@@ -18,7 +18,7 @@ for path in [ROOT, ROOT / "src", ROOT / "experiments_nested"]:
         sys.path.insert(0, str(path))
 
 from experiments_nested._common import build_prefix_instance, make_master_portfolio  # noqa: E402
-from robust_mckp import PricingInstance, solve  # noqa: E402
+from robust_mckp import PricingInstance, solve_reference as solve  # noqa: E402
 from robust_mckp.exact_bnb import (  # noqa: E402
     FixedThetaBNBConfig,
     brute_force_fixed_theta,

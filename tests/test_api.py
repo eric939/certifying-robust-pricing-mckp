@@ -7,7 +7,7 @@ from robust_mckp import (
     PricingInstance,
     filter_admissible_options,
     from_pricing_data,
-    solve,
+    solve_reference as solve,
 )
 from robust_mckp.certificate import compute_certificate
 from robust_mckp.solver import _solve_naive_reference
