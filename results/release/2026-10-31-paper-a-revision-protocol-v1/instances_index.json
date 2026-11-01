@@ -1,0 +1,332 @@
+[
+ {
+  "base_id": "S-regular-n200-m16-r0",
+  "sha256": "b67a3100872cbe05d29f30901e727b534058197be0bb684cfd83cfef9f3d94cb",
+  "file": "S-regular-n200-m16-r0.json"
+ },
+ {
+  "base_id": "S-regular-n200-m16-r1",
+  "sha256": "b1a2d027e31c1b5173e7373c82e6af0862fd0d0d870045c862395ed94d2de1a0",
+  "file": "S-regular-n200-m16-r1.json"
+ },
+ {
+  "base_id": "S-regular-n200-m16-r2",
+  "sha256": "db712cb471750c3038942acf3f057cbac9c68dd75c94b294dc44164422e06192",
+  "file": "S-regular-n200-m16-r2.json"
+ },
+ {
+  "base_id": "S-regular-n200-m16-r3",
+  "sha256": "024ba6ee388adbbec12abba44e6b0f62d5eb64a0ac59538a5dcff018640d5c24",
+  "file": "S-regular-n200-m16-r3.json"
+ },
+ {
+  "base_id": "S-charm-n200-m16-r0",
+  "sha256": "8299d83822143483e9bf87c7f46b34016f950ee4be1456d28f34d17f389c74f8",
+  "file": "S-charm-n200-m16-r0.json"
+ },
+ {
+  "base_id": "S-charm-n200-m16-r1",
+  "sha256": "de65148da5d5fb559f6708ae5370ccd5643ce361b10fbf8953f1944b91ced666",
+  "file": "S-charm-n200-m16-r1.json"
+ },
+ {
+  "base_id": "S-charm-n200-m16-r2",
+  "sha256": "7fe108c3e7eded9c2638e219960dfbed1945baac1d1b6e660d7f516cc48ef1ec",
+  "file": "S-charm-n200-m16-r2.json"
+ },
+ {
+  "base_id": "S-charm-n200-m16-r3",
+  "sha256": "ed8d8d3d3f9d2ddb8026e8679a60768e8a3c2e25dbe6c322d5118b11ecd46942",
+  "file": "S-charm-n200-m16-r3.json"
+ },
+ {
+  "base_id": "S-noisy-n200-m16-r0",
+  "sha256": "12dc5ff80333094476e3486fe541172a73067458eadf9159aec30ced423da7b2",
+  "file": "S-noisy-n200-m16-r0.json"
+ },
+ {
+  "base_id": "S-noisy-n200-m16-r1",
+  "sha256": "0193290ce659c42840c6f700c71d3aecf19833d770096516decbf7049b671432",
+  "file": "S-noisy-n200-m16-r1.json"
+ },
+ {
+  "base_id": "S-noisy-n200-m16-r2",
+  "sha256": "383e48db7b5a0e18258150e8dd4d0119ed4e460750ed3311587c19b038166196",
+  "file": "S-noisy-n200-m16-r2.json"
+ },
+ {
+  "base_id": "S-noisy-n200-m16-r3",
+  "sha256": "136ac9822ee5e9fb78ef5a1784fe30c8e56a7954b19ab7c94e8756100520e70c",
+  "file": "S-noisy-n200-m16-r3.json"
+ },
+ {
+  "base_id": "L-regular-n1000-m8-r0",
+  "sha256": "3f8bc80cee837bcdb135f0501c63c2b58a9400db425fda7fc836745d8b2ed8d9",
+  "file": "L-regular-n1000-m8-r0.json"
+ },
+ {
+  "base_id": "L-regular-n1000-m8-r1",
+  "sha256": "82924bf8ababaefabff4b73cbe236f9d1ee90e090e1256513d001dbc53678a92",
+  "file": "L-regular-n1000-m8-r1.json"
+ },
+ {
+  "base_id": "L-regular-n1000-m8-r2",
+  "sha256": "d7af2c9ee62d25071037cda9049f2131370daf90e51adf3c44eb111481ecb379",
+  "file": "L-regular-n1000-m8-r2.json"
+ },
+ {
+  "base_id": "L-regular-n1000-m16-r0",
+  "sha256": "c8d6a8a0cfc03467ae0221fa6c941e58c51ec668b3b0f6624c36eca9031a5683",
+  "file": "L-regular-n1000-m16-r0.json"
+ },
+ {
+  "base_id": "L-regular-n1000-m16-r1",
+  "sha256": "9c7543c2a009ecadabbcfb1b214188f4213c05af656fa3f47372cbe0248075fe",
+  "file": "L-regular-n1000-m16-r1.json"
+ },
+ {
+  "base_id": "L-regular-n1000-m16-r2",
+  "sha256": "0e08a057364b09017d2b34f3ac6b8c2ba510a9bca97a601ba17b81a393a8be4e",
+  "file": "L-regular-n1000-m16-r2.json"
+ },
+ {
+  "base_id": "L-regular-n1000-m32-r0",
+  "sha256": "5fd49ff15a9fd45fb5d0951c55182fef4afc23a02941793666c1d4923c67e93a",
+  "file": "L-regular-n1000-m32-r0.json"
+ },
+ {
+  "base_id": "L-regular-n1000-m32-r1",
+  "sha256": "84c8f29288f41cb896348379ebc1b241dab376769139429a2c24272f9da64e0e",
+  "file": "L-regular-n1000-m32-r1.json"
+ },
+ {
+  "base_id": "L-regular-n1000-m32-r2",
+  "sha256": "e09e5307ee0c3d17f98d9634f28024c1dc4fc1588de402e000c3155d66bddd67",
+  "file": "L-regular-n1000-m32-r2.json"
+ },
+ {
+  "base_id": "L-regular-n2000-m8-r0",
+  "sha256": "57eca2d8155e13876519a7f5672055cd0e2babc74c84943a646b6ab690af29e7",
+  "file": "L-regular-n2000-m8-r0.json"
+ },
+ {
+  "base_id": "L-regular-n2000-m8-r1",
+  "sha256": "f5ae208524cfbb040798d98d9a5ed7220caf101509083b0da9598afeb4a60053",
+  "file": "L-regular-n2000-m8-r1.json"
+ },
+ {
+  "base_id": "L-regular-n2000-m8-r2",
+  "sha256": "ef18c6275b906972be068bc58545d340eb849efa5e81cdb1b675cb1e65982439",
+  "file": "L-regular-n2000-m8-r2.json"
+ },
+ {
+  "base_id": "L-regular-n2000-m16-r0",
+  "sha256": "a94fbb451d28c5265ed9c9d8bfd4350821f6760042af3a0862b2cd2be99f4778",
+  "file": "L-regular-n2000-m16-r0.json"
+ },
+ {
+  "base_id": "L-regular-n2000-m16-r1",
+  "sha256": "d7a6af0272ec206ab4146ad183c0d837b0886dabc5b0a75d3470d53280b26828",
+  "file": "L-regular-n2000-m16-r1.json"
+ },
+ {
+  "base_id": "L-regular-n2000-m16-r2",
+  "sha256": "1eb251a1b1c9a52d5b3ecd2573f4ff72c05668f9a4ced636b2233487ec4358df",
+  "file": "L-regular-n2000-m16-r2.json"
+ },
+ {
+  "base_id": "L-regular-n2000-m32-r0",
+  "sha256": "5522a55dfffa90ce67d517fca2339b17e1eb8cb2be29add879c2923ce1be4cd9",
+  "file": "L-regular-n2000-m32-r0.json"
+ },
+ {
+  "base_id": "L-regular-n2000-m32-r1",
+  "sha256": "844091128116ea7eb8ab8cb31b2b6e7fdb2a58552dfa51842ba12865f243fc6d",
+  "file": "L-regular-n2000-m32-r1.json"
+ },
+ {
+  "base_id": "L-regular-n2000-m32-r2",
+  "sha256": "1e3e62dd7a680a5916d72594c338552bf543b86ee218e6cc271ff2c749418c84",
+  "file": "L-regular-n2000-m32-r2.json"
+ },
+ {
+  "base_id": "L-regular-n5000-m8-r0",
+  "sha256": "24aa7e36214781f3532d4b97cbaf5495138aa427024df770ca5651ba90d78238",
+  "file": "L-regular-n5000-m8-r0.json"
+ },
+ {
+  "base_id": "L-regular-n5000-m8-r1",
+  "sha256": "15c858f4fea018bab3f3d5b393dba1581bf562c7b857a8a04fc150b0e24955a8",
+  "file": "L-regular-n5000-m8-r1.json"
+ },
+ {
+  "base_id": "L-regular-n5000-m8-r2",
+  "sha256": "64c5a1530fa1759386af1e150b9d898b92c04a08de91e7227a9ebc3df0eb0e34",
+  "file": "L-regular-n5000-m8-r2.json"
+ },
+ {
+  "base_id": "L-regular-n5000-m16-r0",
+  "sha256": "724b633f0f8494c2316be0d1eb3f2a93a595f699696d9809957f4e07336a8669",
+  "file": "L-regular-n5000-m16-r0.json"
+ },
+ {
+  "base_id": "L-regular-n5000-m16-r1",
+  "sha256": "2fca2d3ff29cd42578109b368c1d1877d459e28d8c3f72bef2aa2c13ae434ab6",
+  "file": "L-regular-n5000-m16-r1.json"
+ },
+ {
+  "base_id": "L-regular-n5000-m16-r2",
+  "sha256": "34f0db7515a52db11c06588eaac50f6ccf8a71d9d42e5d52bfdbb5fa4b6317be",
+  "file": "L-regular-n5000-m16-r2.json"
+ },
+ {
+  "base_id": "L-regular-n5000-m32-r0",
+  "sha256": "588f73f3b7b018f848137718162ba2e609762689e769d1e447f5504298a77761",
+  "file": "L-regular-n5000-m32-r0.json"
+ },
+ {
+  "base_id": "L-regular-n5000-m32-r1",
+  "sha256": "bee16624c25d6f7c3795a11909d896425adb0abe68632817a6afa65904077881",
+  "file": "L-regular-n5000-m32-r1.json"
+ },
+ {
+  "base_id": "L-regular-n5000-m32-r2",
+  "sha256": "3f7776c0e02304aca78733b7361c482242656c5b16cfa865cd3e07ee7f350395",
+  "file": "L-regular-n5000-m32-r2.json"
+ },
+ {
+  "base_id": "L-charm-n1000-m8-r0",
+  "sha256": "78c30c422818e5153276b41e5a59951d9cd8298bd926e6b944f798a7ad771d1e",
+  "file": "L-charm-n1000-m8-r0.json"
+ },
+ {
+  "base_id": "L-charm-n1000-m8-r1",
+  "sha256": "074773dfb43fb3fbba9ae3cc5b32322669194a3fe091106a50cdc28b2892db7d",
+  "file": "L-charm-n1000-m8-r1.json"
+ },
+ {
+  "base_id": "L-charm-n1000-m8-r2",
+  "sha256": "beff53c65dce71336d3be02bab6f51990b16872ee3fe6f65de82118e35b08fdb",
+  "file": "L-charm-n1000-m8-r2.json"
+ },
+ {
+  "base_id": "L-charm-n1000-m16-r0",
+  "sha256": "3b87293be8d2ad7673e1dbea4ee259ae6947a14c8604555a37ee653e69badb10",
+  "file": "L-charm-n1000-m16-r0.json"
+ },
+ {
+  "base_id": "L-charm-n1000-m16-r1",
+  "sha256": "f9bb2544222b3184acd8754eaf7fef0391174593dd1a4a186ba7d49067ef1aa9",
+  "file": "L-charm-n1000-m16-r1.json"
+ },
+ {
+  "base_id": "L-charm-n1000-m16-r2",
+  "sha256": "c1170128d65c1287a3ad848905bb3acef6d646d744f71d93e5f34ac919679418",
+  "file": "L-charm-n1000-m16-r2.json"
+ },
+ {
+  "base_id": "L-charm-n1000-m32-r0",
+  "sha256": "21000611cdf2c327a3cfb4f3fe602617cd076bb992db1998e6dc3d73623ae8bf",
+  "file": "L-charm-n1000-m32-r0.json"
+ },
+ {
+  "base_id": "L-charm-n1000-m32-r1",
+  "sha256": "90271d5b4c8503d18b742c41e1a503d452d409fa45f5584c34b944b364c68e55",
+  "file": "L-charm-n1000-m32-r1.json"
+ },
+ {
+  "base_id": "L-charm-n1000-m32-r2",
+  "sha256": "57e09b0ea18c5fef371b2ca31c9bc4da6ddb07a56d2fcdf1d30c0858d279e776",
+  "file": "L-charm-n1000-m32-r2.json"
+ },
+ {
+  "base_id": "L-charm-n2000-m8-r0",
+  "sha256": "e719b96ce04b35e3b4a58836e13a36a17edebd2954fea5e02497af7809d06f63",
+  "file": "L-charm-n2000-m8-r0.json"
+ },
+ {
+  "base_id": "L-charm-n2000-m8-r1",
+  "sha256": "9783441497adc3efa59a010f64b30b8e1e30c13864ddfae40fdb114c4718eb82",
+  "file": "L-charm-n2000-m8-r1.json"
+ },
+ {
+  "base_id": "L-charm-n2000-m8-r2",
+  "sha256": "bcd578deaeb8b278d80f72dbc009723a75163fa99c5d5254f14d3744ae9469db",
+  "file": "L-charm-n2000-m8-r2.json"
+ },
+ {
+  "base_id": "L-charm-n2000-m16-r0",
+  "sha256": "ec801e37cd33e68b01f48f82e4e111b2f9419c111f4e3b00fa143fa9162a2452",
+  "file": "L-charm-n2000-m16-r0.json"
+ },
+ {
+  "base_id": "L-charm-n2000-m16-r1",
+  "sha256": "e3ec48dbb2b8a3e1b2913cf73edef36893073c5db40d9d3be22b062558cbaf3d",
+  "file": "L-charm-n2000-m16-r1.json"
+ },
+ {
+  "base_id": "L-charm-n2000-m16-r2",
+  "sha256": "c29cff5f8e4eee422cce8d057e6fcab353afe058be5170f0d827edc582d527fe",
+  "file": "L-charm-n2000-m16-r2.json"
+ },
+ {
+  "base_id": "L-charm-n2000-m32-r0",
+  "sha256": "b5ec1ee0c90e48ff4f9e51ec05972d00b1c9d3dd5449f77e108aae62d73060d1",
+  "file": "L-charm-n2000-m32-r0.json"
+ },
+ {
+  "base_id": "L-charm-n2000-m32-r1",
+  "sha256": "ecb089c536514a8382230b3fe0fb1ddd0f4d021488d14894ad5278c051cfb9c3",
+  "file": "L-charm-n2000-m32-r1.json"
+ },
+ {
+  "base_id": "L-charm-n2000-m32-r2",
+  "sha256": "cc503a13afbae8ce797ff50b5cfa41ae66ad0a2ef75194b65b675873efdf2893",
+  "file": "L-charm-n2000-m32-r2.json"
+ },
+ {
+  "base_id": "L-charm-n5000-m8-r0",
+  "sha256": "2006e8604f6775b901a6b305bb970d53770451792633a1df6fff0104a07e4014",
+  "file": "L-charm-n5000-m8-r0.json"
+ },
+ {
+  "base_id": "L-charm-n5000-m8-r1",
+  "sha256": "3ebc66ffffba076c47806932eca6a2444e7990f1949f9dfb6b02aeff5b49255f",
+  "file": "L-charm-n5000-m8-r1.json"
+ },
+ {
+  "base_id": "L-charm-n5000-m8-r2",
+  "sha256": "b267d373b8dcee10af30474bc26d863091fcb541a0b32d0aca72b0bc70750f8b",
+  "file": "L-charm-n5000-m8-r2.json"
+ },
+ {
+  "base_id": "L-charm-n5000-m16-r0",
+  "sha256": "2dc9932f4fd5fb1012a119db43574a3ce508629314a22c9a894f8ee1b5ec9fb4",
+  "file": "L-charm-n5000-m16-r0.json"
+ },
+ {
+  "base_id": "L-charm-n5000-m16-r1",
+  "sha256": "be2ba2efff406736e231291ec97a399e7569600ee138d5514f139d48edfa8a78",
+  "file": "L-charm-n5000-m16-r1.json"
+ },
+ {
+  "base_id": "L-charm-n5000-m16-r2",
+  "sha256": "79e6284c693697cc01751ec95f96d70fd675556278bbad2aecf18cc3ed346d80",
+  "file": "L-charm-n5000-m16-r2.json"
+ },
+ {
+  "base_id": "L-charm-n5000-m32-r0",
+  "sha256": "c3a4e709f6c760ed2bb8ab3840147ec69b1adc8f69ac4a22f693dc531c7566ba",
+  "file": "L-charm-n5000-m32-r0.json"
+ },
+ {
+  "base_id": "L-charm-n5000-m32-r1",
+  "sha256": "a2139410ec4907548540ac20bcc8e66257c21063443d09b79eaf7ea3632998a4",
+  "file": "L-charm-n5000-m32-r1.json"
+ },
+ {
+  "base_id": "L-charm-n5000-m32-r2",
+  "sha256": "62b49b74030facac4de6ddf813165bab23545e37a23e7633bfd9d47a48ce88fa",
+  "file": "L-charm-n5000-m32-r2.json"
+ }
+]

@@ -1,0 +1,2 @@
+(eval):1: no such file or directory: /opt/homebrew/bin/python3 /Users/ericshao/.codex/storage-guard/guard.py run --cwd /Users/ericshao/Documents/GitHub/robust-mckp-publication-workspace --expected-gb 1 --
+EXIT 127

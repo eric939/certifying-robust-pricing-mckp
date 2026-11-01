@@ -1,0 +1,126 @@
+{
+ "panel_h": [
+  {
+   "base_id": "H-dominant-n20-m3-r0",
+   "sha256": "e46542ccf8121146876e56a12a177fdbae173c38f1ac6b84b05efeda0af22492",
+   "file": "H-dominant-n20-m3-r0.json"
+  },
+  {
+   "base_id": "H-dominant-n20-m3-r1",
+   "sha256": "8a3115e8af3b1239e8ac34404afdd549ab340d7a2eac6ebad22dffd851055b86",
+   "file": "H-dominant-n20-m3-r1.json"
+  },
+  {
+   "base_id": "H-dominant-n20-m3-r2",
+   "sha256": "5d961f93a5144d8ab19a2ce27129e3afbd8a6500dc250c8e7867114d57d36418",
+   "file": "H-dominant-n20-m3-r2.json"
+  },
+  {
+   "base_id": "H-dominant-n20-m3-r3",
+   "sha256": "33435bc65a7c9f7f77fe6ea59f6f6e5c9379bbbe10660584d3d66ea1f424185d",
+   "file": "H-dominant-n20-m3-r3.json"
+  },
+  {
+   "base_id": "H-dominant-n20-m4-r0",
+   "sha256": "8d57e254c7ce8f9e02fcfde1ce5a2bb6ce8786d761f02994b484e478a04c4068",
+   "file": "H-dominant-n20-m4-r0.json"
+  },
+  {
+   "base_id": "H-dominant-n20-m4-r1",
+   "sha256": "622c67dfa42e877f86a4f9090d0cd825b40dc288c1bf18ebe4116bcfd715d167",
+   "file": "H-dominant-n20-m4-r1.json"
+  },
+  {
+   "base_id": "H-dominant-n20-m4-r2",
+   "sha256": "0fff7569f3586a179c221b710b315991c5bccd2a0d7a94df6aeee014a2473568",
+   "file": "H-dominant-n20-m4-r2.json"
+  },
+  {
+   "base_id": "H-dominant-n20-m4-r3",
+   "sha256": "3cb8ef0213941d1b997c9e7a65d64d62f3fe1eaf374b62f078f31cb99da777c7",
+   "file": "H-dominant-n20-m4-r3.json"
+  },
+  {
+   "base_id": "H-dominant-n100-m3-r0",
+   "sha256": "34400f74d31d21f4eae10caff5d52bda21fe5d61cf3a2d5e80477956bcbc6b8f",
+   "file": "H-dominant-n100-m3-r0.json"
+  },
+  {
+   "base_id": "H-dominant-n100-m3-r1",
+   "sha256": "831b306ff7823051667e5fc5226739dc13933649482d11694b6ced3a282d5e3d",
+   "file": "H-dominant-n100-m3-r1.json"
+  },
+  {
+   "base_id": "H-dominant-n100-m3-r2",
+   "sha256": "723e8d1964c84f67b2a0e4f725da8a2fff7cdfe9ee7e8afcda87418d100c0fbc",
+   "file": "H-dominant-n100-m3-r2.json"
+  },
+  {
+   "base_id": "H-dominant-n100-m3-r3",
+   "sha256": "4da54aae50a68d592d8cb28fbb8adda9d73cf92cc2618431840e3206af81ec57",
+   "file": "H-dominant-n100-m3-r3.json"
+  },
+  {
+   "base_id": "H-dominant-n100-m4-r0",
+   "sha256": "42ef7400848c2aa22457a2c63292212a9fd1a8a0c312a93cbe512f2bbea8f85d",
+   "file": "H-dominant-n100-m4-r0.json"
+  },
+  {
+   "base_id": "H-dominant-n100-m4-r1",
+   "sha256": "e7310339c5104dec771658809799a88573994150bb33778707b03dcbde1c0725",
+   "file": "H-dominant-n100-m4-r1.json"
+  },
+  {
+   "base_id": "H-dominant-n100-m4-r2",
+   "sha256": "4894d8d1467072f4cb50214e38c411560bc3bddb0e0bb6d5e7238d31b5c01b11",
+   "file": "H-dominant-n100-m4-r2.json"
+  },
+  {
+   "base_id": "H-dominant-n100-m4-r3",
+   "sha256": "bbec609c5f077aab2abd064873126cf67f017a4bfa27af9da366c81439ac938f",
+   "file": "H-dominant-n100-m4-r3.json"
+  },
+  {
+   "base_id": "H-dominant-n500-m3-r0",
+   "sha256": "cfbe6c3523a81925c7aa6d8c3127674106dc89edbec5ba1a79e3fe0af5026ee4",
+   "file": "H-dominant-n500-m3-r0.json"
+  },
+  {
+   "base_id": "H-dominant-n500-m3-r1",
+   "sha256": "2a397cdde9f920ffc359b531a18d21167255dc185be6dbd54a08ea7ee09367f6",
+   "file": "H-dominant-n500-m3-r1.json"
+  },
+  {
+   "base_id": "H-dominant-n500-m3-r2",
+   "sha256": "d50f1e787abf6d5b70a12d125457201f9a48fca152eeb6ea95bb68fe0da810b9",
+   "file": "H-dominant-n500-m3-r2.json"
+  },
+  {
+   "base_id": "H-dominant-n500-m3-r3",
+   "sha256": "5e95b4fc6312c9d665259eadf3b489eaf247d01be1802413fa4f0a04bb5f0688",
+   "file": "H-dominant-n500-m3-r3.json"
+  },
+  {
+   "base_id": "H-dominant-n500-m4-r0",
+   "sha256": "ea4f96a839ed5a09801db4b0e48521d3564e18668b09ba0c048f62cfb4cd6d13",
+   "file": "H-dominant-n500-m4-r0.json"
+  },
+  {
+   "base_id": "H-dominant-n500-m4-r1",
+   "sha256": "5b5282fa8078d2690ebacf1e6ff61e268bc37218f52f31393d98184f3eb19969",
+   "file": "H-dominant-n500-m4-r1.json"
+  },
+  {
+   "base_id": "H-dominant-n500-m4-r2",
+   "sha256": "f8ddcb7d55f07424d613d1e29e986a3b0429acb215e0220f4c988c86f41e500b",
+   "file": "H-dominant-n500-m4-r2.json"
+  },
+  {
+   "base_id": "H-dominant-n500-m4-r3",
+   "sha256": "aa8f11562bf891a61dd738e91cd0c10ccc5b830078172eae83ea0f20f4ea43f2",
+   "file": "H-dominant-n500-m4-r3.json"
+  }
+ ],
+ "v1_checked": 66,
+ "v1_mismatch": []
+}

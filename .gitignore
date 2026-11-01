@@ -30,3 +30,13 @@ build/
 data/raw/
 wcer.zip
 upccer.csv
+
+# Evidence releases keep their logs; the protocol-v1 base portfolios (139 MB)
+# are regenerated from their seeds (studies/paper-a-revision/verify_evidence.py).
+!results/release/**/*.log
+!studies/**/*.log
+results/release/2026-10-31-paper-a-revision-protocol-v1/instances/
+
+# Built distributions (make build)
+dist/
+.venv-study/
