@@ -123,6 +123,12 @@ def greedy_lp(hulls: List[Hull], capacity: float) -> LPSolution:
     extra_value = 0.0
     fractional_item: Optional[int] = None
     fractional_lambda = 0.0
+    # Each group's LP position is recorded during the fill: its last fully taken
+    # segment and, for the one group cut by the capacity, the fraction taken.
+    # Re-deriving it from accumulated floating costs can leave a spurious
+    # lambda of order 1e-16 in another group, which then gets rounded instead.
+    full_upto = [-1] * n
+    fractional_segment: Optional[Segment] = None
 
     for seg in segments:
         if residual <= 0.0:
@@ -136,14 +142,25 @@ def greedy_lp(hulls: List[Hull], capacity: float) -> LPSolution:
         if take < seg.length:
             fractional_item = seg.item
             fractional_lambda = take / seg.length
+            fractional_segment = seg
             break
+        full_upto[seg.item] = max(full_upto[seg.item], seg.index)
 
     positions: List[ItemLPPosition] = []
     total_cost = base_cost
     total_value = base_value
     for i, hull in enumerate(hulls):
         cost_i = float(hull.costs[0] + extra_costs[i])
-        pos = _position_from_cost(hull, cost_i)
+        if fractional_segment is not None and fractional_segment.item == i:
+            k = fractional_segment.index
+            lam = float(fractional_lambda)
+            v0 = float(hull.values[k])
+            pos = ItemLPPosition(lower_vertex=k, upper_vertex=k + 1, lambda_=lam, cost=cost_i,
+                                 value=v0 + lam * (float(hull.values[k + 1]) - v0))
+        else:
+            k = full_upto[i] + 1
+            pos = ItemLPPosition(lower_vertex=k, upper_vertex=k, lambda_=0.0, cost=cost_i,
+                                 value=float(hull.values[k]))
         positions.append(pos)
         total_cost += extra_costs[i]
         total_value += pos.value - float(hull.values[0])
